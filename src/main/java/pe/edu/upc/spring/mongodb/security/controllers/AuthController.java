@@ -126,4 +126,14 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+  @PostMapping("/logout")
+  public ResponseEntity<?> logoutUser() {
+    // Create a response cookie to clear the JWT token
+    ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+
+
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(new MessageResponse("You've been logged out successfully!"));
+  }
+
 }
