@@ -1,0 +1,1 @@
+web: java -jar target/spring-boot-mongodb-login-0.0.1-SNAPSHOT.jar server.port=${PORT:8080}
