@@ -94,6 +94,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                   .requestMatchers("/swagger-ui/**").permitAll()
                   .requestMatchers("/swagger-resources/**").permitAll()
                   .requestMatchers("/webjars/**").permitAll()
+                  .requestMatchers("/swagger-ui.html").permitAll()
 
                   .anyRequest().authenticated()
         );
