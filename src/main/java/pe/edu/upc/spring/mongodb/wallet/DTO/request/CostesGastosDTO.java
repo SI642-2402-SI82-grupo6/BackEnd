@@ -1,4 +1,4 @@
-package pe.edu.upc.spring.mongodb.wallet.DTO;
+package pe.edu.upc.spring.mongodb.wallet.DTO.request;
 
 import lombok.Data;
 import pe.edu.upc.spring.mongodb.wallet.object.MotivoGasto;
