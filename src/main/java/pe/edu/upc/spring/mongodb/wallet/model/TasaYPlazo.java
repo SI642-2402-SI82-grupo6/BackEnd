@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 
 import java.util.Date;
@@ -20,14 +21,27 @@ public class TasaYPlazo {
 
     // Para Tasa Nominal
     private Double tasaNominal; // %
-    private Integer diasPorAnio; // DA
-    private String plazoDeTasa; // P
-    private String periodoCapital; // Diario, mensual, etc.
+    private int plazoDeTasa; // P
+    private int periodoCapital; // Diario, mensual, etc.
     private Date fechaDescuento; // Fecha de descuento para tasa nominal
 
     // Para Tasa Efectiva
     private Double tasaEfectiva; // %
     private Integer plazoEfectivo; // En meses o años
+
+    public TasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO){
+        this.tipoTasa = tasaYPlazoDTO.getTipoTasa();
+        if(this.tipoTasa == TipoTasa.NOMINAL){
+            this.tasaNominal = tasaYPlazoDTO.getTasaNominal();
+
+            this.plazoDeTasa = tasaYPlazoDTO.getPlazoDeTasa();
+            this.periodoCapital = tasaYPlazoDTO.getPeriodoCapital();
+            this.fechaDescuento = tasaYPlazoDTO.getFechaDescuento();
+        } else {
+            this.tasaEfectiva = tasaYPlazoDTO.getTasaEfectiva();
+            this.plazoEfectivo = tasaYPlazoDTO.getPlazoEfectivo();
+        }
+    }
 
 
 }

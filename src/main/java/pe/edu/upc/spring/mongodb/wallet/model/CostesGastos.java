@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.MotivoGasto;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoGasto;
 import pe.edu.upc.spring.mongodb.wallet.object.ValorExpresado;
@@ -18,4 +19,10 @@ public class CostesGastos {
     private TipoGasto tipoGasto; // Inicial o Final
     private MotivoGasto motivoGasto; // Motivo del gasto
     private ValorExpresado valorExpresado; // Valor expresado
+
+    public CostesGastos(CostesGastosDTO costesGastos) {;
+        this.tipoGasto = costesGastos.getTipoGasto();
+        this.motivoGasto = costesGastos.getMotivoGasto();
+        this.valorExpresado = costesGastos.getValorExpresado();
+    }
 }

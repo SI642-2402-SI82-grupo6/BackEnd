@@ -9,9 +9,9 @@ import java.util.Date;
 public class TasaYPlazoDTO {
     private TipoTasa tipoTasa; // Tipo de tasa: efectiva o nominal
     private Double tasaNominal; // %
-    private Integer diasPorAnio; // DA
-    private String plazoDeTasa; // P
-    private String periodoCapital; // Diario, mensual, etc.
+
+    private int plazoDeTasa; // P
+    private int periodoCapital; // Diario, mensual, etc.
     private Date fechaDescuento; // Fecha de descuento para tasa nominal
     private Double tasaEfectiva; // %
     private Integer plazoEfectivo; // En meses o años

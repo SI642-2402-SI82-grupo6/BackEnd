@@ -13,6 +13,7 @@ public class ResultadosConsultaDTO {
     private Double retencion; // Retención
     private Double tasaEfectiva; // TE %
     private Double descuento; // d %
+    private Double valorDescuento;
     private Double costeInicial; // Coste Ini.
     private Double costeFinal; // Coste Fin.
     private Double valorNeto; // Val. Neto
