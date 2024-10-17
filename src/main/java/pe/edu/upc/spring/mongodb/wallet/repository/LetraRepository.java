@@ -5,7 +5,10 @@ import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
 public interface LetraRepository extends MongoRepository<Letra, String> {
+    Optional<Letra> findTopByUserIdOrderByFechaGiroDesc(String userId);
     List<Letra> findByUserId(String userId);
     List<Letra> findByUserIdAndFechaEmision(String userId, LocalDate fechaEmision);
     List<Letra> findByUserIdAndFechaVencimiento(String userId, LocalDate fechaVencimiento);

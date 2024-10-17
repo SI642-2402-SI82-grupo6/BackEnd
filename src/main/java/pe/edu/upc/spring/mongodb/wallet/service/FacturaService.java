@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Factura;
+import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
+import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
 import pe.edu.upc.spring.mongodb.wallet.repository.FacturaRepository;
+import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +18,9 @@ public class FacturaService {
 
     @Autowired
     private FacturaRepository facturaRepository;
+
+    @Autowired
+    private DocumentosCreadosRepository documentosCreadosRepository;
 
     public List<Factura> getAllFacturas() {
         return facturaRepository.findAll();
@@ -24,8 +31,20 @@ public class FacturaService {
     }
 
     public Factura createFactura(FacturaDTO facturaDTO) {
+        // Crear la nueva factura
         Factura factura = new Factura(facturaDTO);
-        return facturaRepository.save(factura);
+        Factura savedFactura = facturaRepository.save(factura);
+
+        // Guardar el ID de la factura en DocumentosCreados
+        DocumentosCreados documentoCreado = new DocumentosCreados(
+                savedFactura.getUserId(),
+                savedFactura.getId(),
+                TipoDocumento.FACTURA,
+                LocalDate.now()
+        );
+        documentosCreadosRepository.save(documentoCreado);
+
+        return savedFactura;
     }
 
     public Optional<Factura> updateFactura(String id, Factura facturaDetails) {

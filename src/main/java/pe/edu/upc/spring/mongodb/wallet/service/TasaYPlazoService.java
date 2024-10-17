@@ -42,4 +42,8 @@ public class TasaYPlazoService {
         }
         return false;
     }
+    public List<TasaYPlazo> getAllTasasYPlazos() {
+        return tasaYPlazoRepository.findAll();
+    }
+
 }

@@ -42,4 +42,7 @@ public class CostesGastosService {
         }
         return false;
     }
+    public Optional<CostesGastos> getCosteGastoById(String id) {
+        return costesGastosRepository.findById(id);
+    }
 }

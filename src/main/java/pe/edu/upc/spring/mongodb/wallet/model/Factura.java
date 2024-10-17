@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
+import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
 import java.time.LocalDate;
 
@@ -26,6 +27,8 @@ public class Factura {
         this.totalFacturado = facturaDTO.getTotalFacturado();
         this.retencion = facturaDTO.getRetencion();
     }
-
+    public void setId(){
+        this.id = IdGenerator.generateUniqueId();
+    }
 
 }

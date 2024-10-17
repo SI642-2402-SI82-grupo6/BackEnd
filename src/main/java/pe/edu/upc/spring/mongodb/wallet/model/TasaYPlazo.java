@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
+import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 
 import java.util.Date;
@@ -16,7 +17,7 @@ public class TasaYPlazo {
     @Id
     private String id;
     private String userId;
-
+    private String documentoId;
     private TipoTasa tipoTasa; // Tipo de tasa: efectiva o nominal
 
     // Para Tasa Nominal
@@ -42,6 +43,8 @@ public class TasaYPlazo {
             this.plazoEfectivo = tasaYPlazoDTO.getPlazoEfectivo();
         }
     }
-
+    public void setId(){
+        this.id = IdGenerator.generateUniqueId();
+    }
 
 }

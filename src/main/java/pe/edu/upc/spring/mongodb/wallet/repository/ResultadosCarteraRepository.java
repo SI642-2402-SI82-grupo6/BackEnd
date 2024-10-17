@@ -5,9 +5,10 @@ import pe.edu.upc.spring.mongodb.wallet.model.ResultadosCartera;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ResultadosCarteraRepository extends MongoRepository<ResultadosCartera, String> {
-    List<ResultadosCartera> findByUserId(String userId);
+    Optional<ResultadosCartera> findByUserId(String userId);
     List<ResultadosCartera> findByUserIdAndFechaEmision(String userId, LocalDate fechaEmision);
     List<ResultadosCartera> findByUserIdAndFechaVencimiento(String userId, LocalDate fechaVencimiento);
     List<ResultadosCartera> findByUserIdAndMonto(String userId, Double monto);

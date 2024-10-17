@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
+import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -17,6 +18,7 @@ public class ResultadosConsulta {
     private String id; // ID del resultado de la consulta
     private String userId; // ID del usuario propietario
     private String idDocumento; // ID del documento asociado (factura o letra)
+
     private String numeroConsulta; // Nº de consulta
     private LocalDate fechaGiro; // Fecha Giro
     private Double valorNomAplicando; // Val. Nom. aplicando
@@ -33,7 +35,9 @@ public class ResultadosConsulta {
     private Double valorEntregado; // Val. Ent.
     private Double tceaPorcentaje; // TCEA %
 
-
+    public void setId(){
+        this.id = IdGenerator.generateUniqueId();
+    }
 
     public void CalcularDias(LocalDate fechaVencimiento, LocalDate fechaDescuento) {
         this.dias= (int) ChronoUnit.DAYS.between(fechaDescuento, fechaVencimiento);

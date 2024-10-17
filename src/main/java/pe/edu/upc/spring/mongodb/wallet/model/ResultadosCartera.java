@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosCarteraDTO;
+import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class ResultadosCartera {
 
     // Lista de IDs de resultados de consulta
     private List<String> resultadosConsultaIds;
-
+    public void setId(){
+        this.id = IdGenerator.generateUniqueId();
+    }
     public ResultadosCarteraDTO toResultadosCarteraDTO(){
         ResultadosCarteraDTO resultadosCarteraDTO = new ResultadosCarteraDTO();
         resultadosCarteraDTO.setValorTotalRecibir(this.valorTotalRecibir);
