@@ -79,7 +79,7 @@ public class ResultadosConsultaService {
         resultadosConsulta.CalcularDias(resultadosConsulta.getFechaVencimiento(), fechaDescuento);
 
         // Obtener tasas y plazos
-        var tasaYPlazo = tasaYPlazoRepository.findByDocumentoId(documentoCreado.getIdDocumento())
+        var tasaYPlazo = tasaYPlazoRepository.findLastAdded()
                 .orElseThrow(() -> new RuntimeException("Tasa y Plazo no encontrados."));
 
         if (tasaYPlazo.getTipoTasa() == TipoTasa.NOMINAL) {
@@ -93,7 +93,7 @@ public class ResultadosConsultaService {
                     tasaYPlazo.getPeriodoCapital()
             );
         } else if (tasaYPlazo.getTipoTasa() == TipoTasa.EFECTIVA) {
-            // Asegúrate de que los valores necesarios no sean nulos
+
             if (tasaYPlazo.getTasaEfectiva() == null || tasaYPlazo.getPlazoEfectivo() == null) {
                 throw new RuntimeException("Valores nulos o incompletos para calcular la tasa efectiva.");
             }
