@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.CostesGastos;
+import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.repository.CostesGastosRepository;
+import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,9 @@ public class CostesGastosService {
     @Autowired
     private CostesGastosRepository costesGastosRepository;
 
+    @Autowired
+    private DocumentosCreadosRepository documentosCreadosRepository;
+
     public List<CostesGastos> getAllCostesGastos() {
         return costesGastosRepository.findAll();
     }
@@ -24,7 +29,13 @@ public class CostesGastosService {
     }
 
     public CostesGastos createCostesGastos(CostesGastosDTO costesGastos) {
+        Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();
+        if (!lastCreatedDoc.isPresent()) {
+            throw new RuntimeException("No DocumentosCreados found.");
+        }
+        String documentoId = lastCreatedDoc.get().getIdDocumento();
         CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
+        costesGastosEntity.setDocumentoId(documentoId);
         return costesGastosRepository.save(costesGastosEntity);
     }
 

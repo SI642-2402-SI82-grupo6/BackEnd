@@ -40,7 +40,7 @@ public class ResultadosConsultaService {
     public ResultadosConsultaDTO calcularResultados(String documentoId, LocalDate fechaDescuento) {
         Optional<DocumentosCreados> documentoCreadoOpt = documentosCreadosRepository.findById(documentoId);
 
-        if (!documentoCreadoOpt.isPresent()) {
+        if (documentoCreadoOpt.isEmpty()) {
             throw new RuntimeException("El documento no fue encontrado.");
         }
 
@@ -57,7 +57,7 @@ public class ResultadosConsultaService {
         // Dependiendo del tipo de documento, cargamos la información de factura o letra
         if (documentoCreado.getTipoDocumento().equals(TipoDocumento.FACTURA)) {
             Optional<Factura> facturaOpt = facturaRepository.findById(documentoCreado.getIdDocumento());
-            if (!facturaOpt.isPresent()) {
+            if (facturaOpt.isEmpty()) {
                 throw new RuntimeException("Factura no encontrada.");
             }
             Factura factura = facturaOpt.get();
@@ -66,7 +66,7 @@ public class ResultadosConsultaService {
             resultadosConsulta.setFechaVencimiento(factura.getFechaPago());
         } else if (documentoCreado.getTipoDocumento().equals(TipoDocumento.LETRA)) {
             Optional<Letra> letraOpt = letraRepository.findById(documentoCreado.getIdDocumento());
-            if (!letraOpt.isPresent()) {
+            if (letraOpt.isEmpty()) {
                 throw new RuntimeException("Letra no encontrada.");
             }
             Letra letra = letraOpt.get();

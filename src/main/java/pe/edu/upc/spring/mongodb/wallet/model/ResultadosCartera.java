@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosCarteraDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
@@ -24,7 +26,15 @@ public class ResultadosCartera {
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
     }
+
+
     public ResultadosCarteraDTO toResultadosCarteraDTO(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
         ResultadosCarteraDTO resultadosCarteraDTO = new ResultadosCarteraDTO();
         resultadosCarteraDTO.setValorTotalRecibir(this.valorTotalRecibir);
         resultadosCarteraDTO.setTcea(this.tcea);

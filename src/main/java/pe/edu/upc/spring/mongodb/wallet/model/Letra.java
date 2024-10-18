@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
@@ -22,6 +24,12 @@ public class Letra {
     private Double retencion; // Retención
 
     public Letra(LetraDTO letraDTO){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
         this.fechaGiro = letraDTO.getFechaGiro();
         this.fechaVencimiento = letraDTO.getFechaVencimiento();
         this.valorNominal = letraDTO.getValorNominal();

@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
@@ -78,6 +80,12 @@ public class ResultadosConsulta {
 
 
     public ResultadosConsultaDTO toResultadosConsultaDTO(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
         ResultadosConsultaDTO resultadosConsultaDTO = new ResultadosConsultaDTO();
         resultadosConsultaDTO.setNumeroConsulta(this.numeroConsulta);
         resultadosConsultaDTO.setFechaGiro(this.fechaGiro);

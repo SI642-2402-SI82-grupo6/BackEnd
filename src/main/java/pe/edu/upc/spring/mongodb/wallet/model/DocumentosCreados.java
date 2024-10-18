@@ -20,6 +20,7 @@ public class DocumentosCreados {
     private LocalDate fechaCreacion;  // Fecha de creación del documento
 
     public DocumentosCreados(String userId, String idDocumento, TipoDocumento tipoDocumento, LocalDate fechaCreacion) {
+
         this.userId = userId;
         this.idDocumento = idDocumento;
         this.tipoDocumento = tipoDocumento;

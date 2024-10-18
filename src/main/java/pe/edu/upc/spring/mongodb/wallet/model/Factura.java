@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
@@ -22,6 +24,12 @@ public class Factura {
     private Double retencion; // Retención (Rt)
 
     public Factura(FacturaDTO facturaDTO){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
         this.fechaEmision = facturaDTO.getFechaEmision();
         this.fechaPago = facturaDTO.getFechaPago();
         this.totalFacturado = facturaDTO.getTotalFacturado();
