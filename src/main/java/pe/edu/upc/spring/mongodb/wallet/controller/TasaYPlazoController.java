@@ -47,4 +47,8 @@ public class TasaYPlazoController {
     public ResponseEntity<Void> eliminarTasaYPlazo(@PathVariable String id) {
         return tasaYPlazoService.deleteTasaYPlazo(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> eliminarTasaYPlazoPorUserId(@PathVariable String userId) {
+        return tasaYPlazoService.deleteTasaYPlazoByUserId(userId) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
 }

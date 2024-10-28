@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
 
-import java.util.List;
 import java.util.Optional;
 @EnableMongoRepositories
 public interface TasaYPlazoRepository extends MongoRepository<TasaYPlazo,String> {
@@ -13,6 +12,8 @@ public interface TasaYPlazoRepository extends MongoRepository<TasaYPlazo,String>
     Optional<TasaYPlazo> findLastAdded();
 
     Optional<TasaYPlazo> findByUserId(String userId);
+
+    void deleteByUserId(String userId);
 
 
 }

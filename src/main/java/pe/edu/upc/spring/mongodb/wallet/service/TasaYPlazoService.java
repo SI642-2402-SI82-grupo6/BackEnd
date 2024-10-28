@@ -62,5 +62,13 @@ public class TasaYPlazoService {
     public List<TasaYPlazo> getAllTasasYPlazos() {
         return tasaYPlazoRepository.findAll();
     }
+    public boolean deleteTasaYPlazoByUserId(String userId) {
+        Optional<TasaYPlazo> tasaYPlazo = tasaYPlazoRepository.findByUserId(userId);
+        if (tasaYPlazo.isPresent()) {
+            tasaYPlazoRepository.deleteByUserId(tasaYPlazo.get().getUserId());
+            return true;
+        }
+        return false;
+    }
 
 }
