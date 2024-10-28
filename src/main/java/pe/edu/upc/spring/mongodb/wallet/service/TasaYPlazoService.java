@@ -1,6 +1,8 @@
 package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
@@ -53,6 +55,7 @@ public class TasaYPlazoService {
     }
 
     public boolean deleteTasaYPlazo(String id) {
+
         if (tasaYPlazoRepository.existsById(id)) {
             tasaYPlazoRepository.deleteById(id);
             return true;
@@ -62,7 +65,14 @@ public class TasaYPlazoService {
     public List<TasaYPlazo> getAllTasasYPlazos() {
         return tasaYPlazoRepository.findAll();
     }
-    public boolean deleteTasaYPlazoByUserId(String userId) {
+    public boolean deleteTasaYPlazoByUserId() {
+        String userId;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userId = ((UserDetails) principal).getUsername();
+        } else {
+            userId = principal.toString();
+        }
         Optional<TasaYPlazo> tasaYPlazo = tasaYPlazoRepository.findByUserId(userId);
         if (tasaYPlazo.isPresent()) {
             tasaYPlazoRepository.deleteByUserId(tasaYPlazo.get().getUserId());
