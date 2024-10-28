@@ -17,8 +17,9 @@ public class TasaYPlazoController {
     private TasaYPlazoService tasaYPlazoService;
 
     @PostMapping
-    public ResponseEntity<TasaYPlazo> crearTasaYPlazo(@RequestBody TasaYPlazoDTO tasaYPlazoDTO) {
-        TasaYPlazo tasaYPlazo = tasaYPlazoService.createTasaYPlazo(tasaYPlazoDTO);
+    public ResponseEntity<TasaYPlazoDTO> crearTasaYPlazo(@RequestBody TasaYPlazoDTO tasaYPlazoDTO) {
+
+        TasaYPlazoDTO tasaYPlazo = tasaYPlazoService.createTasaYPlazo(tasaYPlazoDTO);
         return ResponseEntity.ok(tasaYPlazo);
     }
 
@@ -29,7 +30,7 @@ public class TasaYPlazoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TasaYPlazo> obtenerTasaYPlazoPorId(@PathVariable String id) {
+    public ResponseEntity<TasaYPlazoDTO> obtenerTasaYPlazoPorId(@PathVariable String id) {
         return tasaYPlazoService.getTasaYPlazoById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

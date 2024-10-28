@@ -10,6 +10,7 @@ import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -25,7 +26,7 @@ public class TasaYPlazo {
     private Double tasaNominal; // %
     private int plazoDeTasa; // P
     private int periodoCapital; // Diario, mensual, etc.
-    private Date fechaDescuento; // Fecha de descuento para tasa nominal
+    private LocalDate fechaDescuento; // Fecha de descuento para tasa nominal
 
     // Para Tasa Efectiva
     private Double tasaEfectiva; // %
@@ -52,6 +53,17 @@ public class TasaYPlazo {
     }
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
+    }
+    public TasaYPlazoDTO toDTO(TasaYPlazo tasaYPlazo){
+        TasaYPlazoDTO tasaYPlazoDTO = new TasaYPlazoDTO();
+        tasaYPlazoDTO.setTipoTasa(tasaYPlazo.getTipoTasa());
+        tasaYPlazoDTO.setTasaNominal(tasaYPlazo.getTasaNominal());
+        tasaYPlazoDTO.setPlazoDeTasa(tasaYPlazo.getPlazoDeTasa());
+        tasaYPlazoDTO.setPeriodoCapital(tasaYPlazo.getPeriodoCapital());
+        tasaYPlazoDTO.setFechaDescuento(tasaYPlazo.getFechaDescuento());
+        tasaYPlazoDTO.setTasaEfectiva(tasaYPlazo.getTasaEfectiva());
+        tasaYPlazoDTO.setPlazoEfectivo(tasaYPlazo.getPlazoEfectivo());
+        return tasaYPlazoDTO;
     }
 
 }

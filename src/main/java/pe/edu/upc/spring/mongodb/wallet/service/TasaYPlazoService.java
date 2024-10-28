@@ -19,18 +19,26 @@ public class TasaYPlazoService {
         return tasaYPlazoRepository.findAll();
     }
 
-    public Optional<TasaYPlazo> getTasaYPlazoById(String id) {
-        return tasaYPlazoRepository.findById(id);
+    public Optional<TasaYPlazoDTO> getTasaYPlazoById(String id) {
+        Optional<TasaYPlazo> tasaYPlazoOpt = tasaYPlazoRepository.findById(id);
+        if (tasaYPlazoOpt.isPresent()) {
+            TasaYPlazo tasaYPlazo = tasaYPlazoOpt.get();
+            TasaYPlazoDTO tasaYPlazoDTO = tasaYPlazo.toDTO(tasaYPlazo);
+            return Optional.of(tasaYPlazoDTO);
+        } else {
+            return Optional.empty();
+        }
     }
-
-    public TasaYPlazo createTasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO) {
+    public TasaYPlazoDTO createTasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO) {
         TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
-        return tasaYPlazoRepository.save(tasaYPlazo);
+        tasaYPlazoRepository.save(tasaYPlazo);
+        return tasaYPlazo.toDTO(tasaYPlazo);
     }
 
     public Optional<TasaYPlazo> updateTasaYPlazo(String id, TasaYPlazo tasaYPlazoDetails) {
         return tasaYPlazoRepository.findById(id).map(tasaYPlazo -> {
             tasaYPlazoDetails.setId(id);
+            tasaYPlazoRepository.save(tasaYPlazoDetails);
             return tasaYPlazoRepository.save(tasaYPlazoDetails);
         });
     }
