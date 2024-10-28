@@ -12,5 +12,7 @@ public interface TasaYPlazoRepository extends MongoRepository<TasaYPlazo,String>
     @Query(value = "{}", sort = "{ '_id' : -1 }")
     Optional<TasaYPlazo> findLastAdded();
 
+    Optional<TasaYPlazo> findByUserId(String userId);
+
 
 }
