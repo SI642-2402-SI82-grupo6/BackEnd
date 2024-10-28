@@ -31,8 +31,17 @@ public class TasaYPlazoService {
     }
     public TasaYPlazoDTO createTasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO) {
         TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
+        Optional<TasaYPlazo> tasaYPlazoOpt = tasaYPlazoRepository.findById(tasaYPlazo.getUserId());
+        if (tasaYPlazoOpt.isPresent()) {
+            throw new RuntimeException("TasaYPlazo already exists.");
+
+        }
+
         tasaYPlazoRepository.save(tasaYPlazo);
         return tasaYPlazo.toDTO(tasaYPlazo);
+
+
+
     }
 
     public Optional<TasaYPlazo> updateTasaYPlazo(String id, TasaYPlazo tasaYPlazoDetails) {
