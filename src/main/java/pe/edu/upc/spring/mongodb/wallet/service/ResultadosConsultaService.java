@@ -14,6 +14,8 @@ import pe.edu.upc.spring.mongodb.wallet.repository.*;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -125,6 +127,7 @@ public class ResultadosConsultaService {
         resultadosConsulta.CalcularValorRecibir();
         resultadosConsulta.CalcularValorEntregado();
         resultadosConsulta.CalcularTceaPorcentaje();
+        resultadosConsultaRepository.save(resultadosConsulta);
 
 
         return resultadosConsulta.toResultadosConsultaDTO();
@@ -135,5 +138,32 @@ public class ResultadosConsultaService {
                 .map(r -> Integer.parseInt(r.getNumeroConsulta()))
                 .max(Integer::compareTo)
                 .orElse(0); // Si no existe ningún documento previo, empezamos en 0
+    }
+
+    public List<ResultadosConsultaDTO> getAllResultadosConsulta() {
+        List<ResultadosConsulta> resultadosConsultaList = resultadosConsultaRepository.findAll();
+        List<ResultadosConsultaDTO> resultadosConsultaDTOList = new ArrayList<>();
+
+        for (ResultadosConsulta resultadosConsulta : resultadosConsultaList) {
+            ResultadosConsultaDTO dto = new ResultadosConsultaDTO();
+            dto.setNumeroConsulta(resultadosConsulta.getNumeroConsulta());
+            dto.setFechaGiro(resultadosConsulta.getFechaGiro());
+            dto.setValorNomAplicando(resultadosConsulta.getValorNomAplicando());
+            dto.setFechaVencimiento(resultadosConsulta.getFechaVencimiento());
+            dto.setDias(resultadosConsulta.getDias());
+            dto.setRetencion(resultadosConsulta.getRetencion());
+            dto.setTasaEfectiva(resultadosConsulta.getTasaEfectiva());
+            dto.setDescuento(resultadosConsulta.getDescuento());
+            dto.setValorDescuento(resultadosConsulta.getValorDescuento());
+            dto.setCosteInicial(resultadosConsulta.getCosteInicial());
+            dto.setCosteFinal(resultadosConsulta.getCosteFinal());
+            dto.setValorNeto(resultadosConsulta.getValorNeto());
+            dto.setValorRecibir(resultadosConsulta.getValorRecibir());
+            dto.setValorEntregado(resultadosConsulta.getValorEntregado());
+            dto.setTceaPorcentaje(resultadosConsulta.getTceaPorcentaje());
+            resultadosConsultaDTOList.add(dto);
+        }
+
+        return resultadosConsultaDTOList;
     }
 }

@@ -1,13 +1,16 @@
 package pe.edu.upc.spring.mongodb.wallet.DTO.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDate;
 
 @Data
 public class ResultadosConsultaDTO {
     private String numeroConsulta; // Nº de consulta
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaGiro; // Fecha Giro
     private Double valorNomAplicando; // Val. Nom. aplicando
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaVencimiento; // Fecha Ven.
     private Integer dias; // Días
     private Double retencion; // Retención
