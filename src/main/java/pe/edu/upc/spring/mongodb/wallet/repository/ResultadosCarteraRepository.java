@@ -10,5 +10,7 @@ import java.util.Optional;
 @EnableMongoRepositories
 public interface ResultadosCarteraRepository extends MongoRepository<ResultadosCartera, String> {
     Optional<ResultadosCartera> findByUserId(String userId);
+    void deleteByUserId(String userId);
+
 
 }
