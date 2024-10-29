@@ -38,5 +38,5 @@ public class Letra {
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
     }
-    // Puedes añadir otros atributos o métodos según lo necesites
+
 }

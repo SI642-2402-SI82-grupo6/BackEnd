@@ -1,169 +1,136 @@
 package pe.edu.upc.spring.mongodb.wallet.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
-import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
-import pe.edu.upc.spring.mongodb.wallet.model.Factura;
-import pe.edu.upc.spring.mongodb.wallet.model.Letra;
-import pe.edu.upc.spring.mongodb.wallet.model.CostesGastos;
-import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
+import pe.edu.upc.spring.mongodb.wallet.model.*;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoGasto;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 import pe.edu.upc.spring.mongodb.wallet.repository.*;
-import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Service
 public class ResultadosConsultaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResultadosConsultaService.class);
 
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
 
     @Autowired
-    private FacturaRepository facturaRepository;
-
+    private ResultadosConsultaRepository ResultadosConsultaRepository;
     @Autowired
     private LetraRepository letraRepository;
-
-    @Autowired
-    private CostesGastosRepository costesGastosRepository;
-
     @Autowired
     private TasaYPlazoRepository tasaYPlazoRepository;
-
     @Autowired
-    private ResultadosConsultaRepository resultadosConsultaRepository;
+    private CostesGastosRepository costesGastosRepository;
+    @Autowired
+    private FacturaRepository facturaRepository;
+    LocalDate fechaVencimiento ;
 
-    public ResultadosConsultaDTO calcularResultados(String documentoId, LocalDate fechaDescuento) {
-        Optional<DocumentosCreados> documentoCreadoOpt = documentosCreadosRepository.findById(documentoId);
+    private static final AtomicLong counter = new AtomicLong(1);
+    public List<ResultadosConsultaDTO> calcularResultados() {
+        List<DocumentosCreados> documentosCreados = documentosCreadosRepository.findAll();
 
-        if (documentoCreadoOpt.isEmpty()) {
-            throw new RuntimeException("El documento no fue encontrado.");
-        }
 
-        DocumentosCreados documentoCreado = documentoCreadoOpt.get();
-        ResultadosConsulta resultadosConsulta = new ResultadosConsulta();
+        return documentosCreados.stream().map(documentoCreado -> {
+            ResultadosConsulta resultadosConsulta = new ResultadosConsulta();
 
-        resultadosConsulta.setIdDocumento(documentoCreado.getIdDocumento());
-        resultadosConsulta.setUserId(documentoCreado.getUserId());
 
-        // Asignar número de consulta de forma secuencial
-        Integer ultimoNumeroConsulta = obtenerUltimoNumeroConsulta();
-        resultadosConsulta.setNumeroConsulta(String.valueOf(ultimoNumeroConsulta + 1));
-
-        // Dependiendo del tipo de documento, cargamos la información de factura o letra
-        if (documentoCreado.getTipoDocumento().equals(TipoDocumento.FACTURA)) {
-            Optional<Factura> facturaOpt = facturaRepository.findById(documentoCreado.getIdDocumento());
-            if (facturaOpt.isEmpty()) {
-                throw new RuntimeException("Factura no encontrada.");
+            String documentoId = documentoCreado.getDocumentoId();
+            if (documentoId == null) {
+                throw new IllegalArgumentException("The given id must not be null");
             }
-            Factura factura = facturaOpt.get();
-            resultadosConsulta.setFechaGiro(factura.getFechaEmision());
-            resultadosConsulta.setValorNomAplicando(factura.getTotalFacturado());
-            resultadosConsulta.setFechaVencimiento(factura.getFechaPago());
-        } else if (documentoCreado.getTipoDocumento().equals(TipoDocumento.LETRA)) {
-            Optional<Letra> letraOpt = letraRepository.findById(documentoCreado.getIdDocumento());
-            if (letraOpt.isEmpty()) {
-                throw new RuntimeException("Letra no encontrada.");
+
+            resultadosConsulta.setDocumentoId(documentoId);
+            resultadosConsulta.setUserId(documentoCreado.getUserId());
+            resultadosConsulta.setNumeroConsulta(String.valueOf(counter.getAndIncrement()));
+
+            // Handle multiple results by selecting the first one
+            Optional<DocumentosCreados> documentos = documentosCreadosRepository.findByDocumentoId(documentoId);
+            if (documentos.isEmpty()) {
+                throw new RuntimeException("Documento no encontrado.");
             }
-            Letra letra = letraOpt.get();
-            resultadosConsulta.setFechaGiro(letra.getFechaGiro());
-            resultadosConsulta.setValorNomAplicando(letra.getValorNominal());
-            resultadosConsulta.setFechaVencimiento(letra.getFechaVencimiento());
-        }
-
-        // Calcular los días
-        resultadosConsulta.CalcularDias(resultadosConsulta.getFechaVencimiento(), fechaDescuento);
-
-        // Obtener tasas y plazos
-        var tasaYPlazo = tasaYPlazoRepository.findLastAdded()
-                .orElseThrow(() -> new RuntimeException("Tasa y Plazo no encontrados."));
-
-        if (tasaYPlazo.getTipoTasa() == TipoTasa.NOMINAL) {
-            // Asegúrate de que los valores necesarios no sean nulos
-            if (tasaYPlazo.getTasaNominal() == null ) {
-                throw new RuntimeException("Valores nulos o incompletos para calcular la tasa nominal.");
+            // Search and assign data from Factura or Letra
+            Optional<Factura> facturaOpt = facturaRepository.findById(documentoId);
+            if (facturaOpt.isPresent()) {
+                Factura factura = facturaOpt.get();
+                resultadosConsulta.setFechaGiro(factura.getFechaEmision());
+                resultadosConsulta.setValorNomAplicando(factura.getTotalFacturado());
+                resultadosConsulta.setFechaVencimiento(factura.getFechaPago());
+                resultadosConsulta.setRetencion(factura.getRetencion());
+                fechaVencimiento = factura.getFechaPago();
+            } else {
+                Optional<Letra> letraOpt = letraRepository.findById(documentoId);
+                if (letraOpt.isPresent()) {
+                    Letra letra = letraOpt.get();
+                    resultadosConsulta.setFechaGiro(letra.getFechaGiro());
+                    resultadosConsulta.setValorNomAplicando(letra.getValorNominal());
+                    resultadosConsulta.setFechaVencimiento(letra.getFechaVencimiento());
+                    resultadosConsulta.setRetencion(letra.getRetencion());
+                    fechaVencimiento = letra.getFechaVencimiento();
+                } else {
+                    throw new RuntimeException("Factura o Letra no encontrada.");
+                }
             }
-            resultadosConsulta.CalcularTEDiasTasaNominal(
-                    tasaYPlazo.getTasaNominal(),
-                    tasaYPlazo.getPlazoDeTasa(),
-                    tasaYPlazo.getPeriodoCapital()
-            );
-        } else if (tasaYPlazo.getTipoTasa() == TipoTasa.EFECTIVA) {
 
-            if (tasaYPlazo.getTasaEfectiva() == null || tasaYPlazo.getPlazoEfectivo() == null) {
-                throw new RuntimeException("Valores nulos o incompletos para calcular la tasa efectiva.");
+
+            // Calculate the costesGastos
+            List<CostesGastos> costesGastosList = costesGastosRepository.findAll();
+            for (CostesGastos costeGasto : costesGastosList) {
+                if (costeGasto.getDocumentoId().equals(documentoId)) {
+                    double valor = costeGasto.getValorExpresado().isEsPorcentaje() ?
+                            costeGasto.getValorExpresado().getValor() * resultadosConsulta.getValorNomAplicando() / 100 :
+                            costeGasto.getValorExpresado().getValor();
+
+                    if (costeGasto.getTipoGasto() == TipoGasto.INICIAL) {
+                        resultadosConsulta.sumCosteInicial(valor);
+                    } else if (costeGasto.getTipoGasto() == TipoGasto.FINAL) {
+                        resultadosConsulta.sumCosteFinal(valor);
+                    }
+                }
             }
-            resultadosConsulta.CalcularTEdiasTasaEfectiva(
-                    tasaYPlazo.getTasaEfectiva(),
-                    tasaYPlazo.getPlazoEfectivo()
-            );
-        } else {
-            throw new RuntimeException("Tipo de tasa no soportado: " + tasaYPlazo.getTipoTasa());
-        }
+            // Fetch TasaYPlazo and apply calculations
+            Optional<TasaYPlazo> tasaYPlazoOpt = tasaYPlazoRepository.findByUserId(resultadosConsulta.getUserId());
+            logger.info("Fetched TasaYPlazo: {}", tasaYPlazoOpt);
 
+            if (tasaYPlazoOpt.isPresent()) {
+                TasaYPlazo tasaYPlazo = tasaYPlazoOpt.get();
+                logger.info("Fecha de vencimiento (Factura): {}", fechaVencimiento);
+                resultadosConsulta.CalcularDias(tasaYPlazo.getFechaDescuento(), fechaVencimiento);
+                if (tasaYPlazo.getTipoTasa() .equals (TipoTasa.EFECTIVA)) {
 
-        // Calcular el descuento y otros valores
-        resultadosConsulta.CalcularDescuento();
-        resultadosConsulta.CalcularValorDescuento();
-
-        // Obtener los costes iniciales y finales
-        var costesGastos = costesGastosRepository.findByDocumentoId(documentoCreado.getIdDocumento());
-        costesGastos.ifPresent(cg -> {
-            if (cg.getTipoGasto().equals(TipoGasto.INICIAL)) {
-                resultadosConsulta.setCosteInicial(cg.getValorExpresado().getValor());
-            } else if (cg.getTipoGasto().equals(TipoGasto.FINAL)) {
-                resultadosConsulta.setCosteFinal(cg.getValorExpresado().getValor());
+                    resultadosConsulta.CalcularTEdiasTasaEfectiva(tasaYPlazo.getTasaEfectiva(), tasaYPlazo.getPlazoEfectivo());
+                } else if (tasaYPlazo.getTipoTasa() == TipoTasa.NOMINAL) {
+                    resultadosConsulta.CalcularTEDiasTasaNominal(tasaYPlazo.getTasaNominal(), tasaYPlazo.getPlazoDeTasa(), tasaYPlazo.getPeriodoCapital());
+                }
             }
-        });
+            // Llamar a los métodos adicionales
+            resultadosConsulta.CalcularDescuento();
+            resultadosConsulta.CalcularValorDescuento();
+            resultadosConsulta.CaluclarValorNeto();
+            resultadosConsulta.CalcularValorRecibir();
+            resultadosConsulta.CalcularValorEntregado();
+            resultadosConsulta.CalcularTceaPorcentaje();
 
 
-        resultadosConsulta.CaluclarValorNeto();
-        resultadosConsulta.CalcularValorRecibir();
-        resultadosConsulta.CalcularValorEntregado();
-        resultadosConsulta.CalcularTceaPorcentaje();
-        resultadosConsultaRepository.save(resultadosConsulta);
+            DocumentosCreados documento = documentos.get();
+            ResultadosConsultaRepository.save(resultadosConsulta);
 
 
-        return resultadosConsulta.toResultadosConsultaDTO();
-    }
+            // Continue processing with the selected document
+            // ...
 
-     private Integer obtenerUltimoNumeroConsulta() {
-        return resultadosConsultaRepository.findAll().stream()
-                .map(r -> Integer.parseInt(r.getNumeroConsulta()))
-                .max(Integer::compareTo)
-                .orElse(0); // Si no existe ningún documento previo, empezamos en 0
-    }
 
-    public List<ResultadosConsultaDTO> getAllResultadosConsulta() {
-        List<ResultadosConsulta> resultadosConsultaList = resultadosConsultaRepository.findAll();
-        List<ResultadosConsultaDTO> resultadosConsultaDTOList = new ArrayList<>();
-
-        for (ResultadosConsulta resultadosConsulta : resultadosConsultaList) {
-            ResultadosConsultaDTO dto = new ResultadosConsultaDTO();
-            dto.setNumeroConsulta(resultadosConsulta.getNumeroConsulta());
-            dto.setFechaGiro(resultadosConsulta.getFechaGiro());
-            dto.setValorNomAplicando(resultadosConsulta.getValorNomAplicando());
-            dto.setFechaVencimiento(resultadosConsulta.getFechaVencimiento());
-            dto.setDias(resultadosConsulta.getDias());
-            dto.setRetencion(resultadosConsulta.getRetencion());
-            dto.setTasaEfectiva(resultadosConsulta.getTasaEfectiva());
-            dto.setDescuento(resultadosConsulta.getDescuento());
-            dto.setValorDescuento(resultadosConsulta.getValorDescuento());
-            dto.setCosteInicial(resultadosConsulta.getCosteInicial());
-            dto.setCosteFinal(resultadosConsulta.getCosteFinal());
-            dto.setValorNeto(resultadosConsulta.getValorNeto());
-            dto.setValorRecibir(resultadosConsulta.getValorRecibir());
-            dto.setValorEntregado(resultadosConsulta.getValorEntregado());
-            dto.setTceaPorcentaje(resultadosConsulta.getTceaPorcentaje());
-            resultadosConsultaDTOList.add(dto);
-        }
-
-        return resultadosConsultaDTOList;
+            return resultadosConsulta.toResultadosConsultaDTO();
+        }).collect(Collectors.toList());
     }
 }

@@ -7,7 +7,7 @@ import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-@EnableMongoRepositories
+
 public interface LetraRepository extends MongoRepository<Letra, String> {
 
 }

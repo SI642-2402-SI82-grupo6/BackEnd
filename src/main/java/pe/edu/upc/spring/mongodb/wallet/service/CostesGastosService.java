@@ -33,7 +33,7 @@ public class CostesGastosService {
         if (!lastCreatedDoc.isPresent()) {
             throw new RuntimeException("No DocumentosCreados found.");
         }
-        String documentoId = lastCreatedDoc.get().getIdDocumento();
+        String documentoId = lastCreatedDoc.get().getDocumentoId();
         CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
         costesGastosEntity.setDocumentoId(documentoId);
         return costesGastosRepository.save(costesGastosEntity);
@@ -56,4 +56,6 @@ public class CostesGastosService {
     public Optional<CostesGastos> getCosteGastoById(String id) {
         return costesGastosRepository.findById(id);
     }
+
+
 }

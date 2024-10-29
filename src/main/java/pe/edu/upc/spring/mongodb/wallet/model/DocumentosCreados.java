@@ -15,14 +15,14 @@ public class DocumentosCreados {
     @Id
     private String id;
     private String userId;  // ID del usuario
-    private String idDocumento;  // ID del documento (factura o letra)
+    private String documentoId;  // ID del documento (factura o letra)
     private TipoDocumento tipoDocumento;  // Enum para diferenciar entre Factura y Letra
     private LocalDate fechaCreacion;  // Fecha de creación del documento
 
-    public DocumentosCreados(String userId, String idDocumento, TipoDocumento tipoDocumento, LocalDate fechaCreacion) {
+    public DocumentosCreados(String userId, String documentoId, TipoDocumento tipoDocumento, LocalDate fechaCreacion) {
 
         this.userId = userId;
-        this.idDocumento = idDocumento;
+        this.documentoId = documentoId;
         this.tipoDocumento = tipoDocumento;
         this.fechaCreacion = fechaCreacion;
     }

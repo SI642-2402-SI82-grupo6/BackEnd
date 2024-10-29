@@ -23,8 +23,8 @@ public class FacturaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Factura>> obtenerTodasFacturas() {
-        List<Factura> facturas = facturaService.getAllFacturas();
+    public ResponseEntity<List<FacturaDTO>> obtenerTodasFacturas() {
+        List<FacturaDTO> facturas = facturaService.getAllFacturas();
         return ResponseEntity.ok(facturas);
     }
 

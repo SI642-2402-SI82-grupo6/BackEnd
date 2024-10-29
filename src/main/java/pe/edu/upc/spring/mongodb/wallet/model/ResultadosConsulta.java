@@ -19,30 +19,68 @@ public class ResultadosConsulta {
     @Id
     private String id; // ID del resultado de la consulta
     private String userId; // ID del usuario propietario
-    private String idDocumento; // ID del documento asociado (factura o letra)
+    private String documentoId; // ID del documento asociado (factura o letra)
 
     private String numeroConsulta; // Nº de consulta
     private LocalDate fechaGiro; // Fecha Giro
     private Double valorNomAplicando; // Val. Nom. aplicando
     private LocalDate fechaVencimiento; // Fecha Ven.
     private int dias; // Días
-    private Double retencion; // Retención
-    private Double tasaEfectiva; // TE %
-    private Double descuento; // d %
-    private Double valorDescuento;
-    private Double costeInicial; // Coste Ini.
-    private Double costeFinal; // Coste Fin.
-    private Double valorNeto; // Val. Neto
-    private Double valorRecibir; // Val. Rec.
-    private Double valorEntregado; // Val. Ent.
-    private Double tceaPorcentaje; // TCEA %
+    private Double retencion= 0.0; // Retención
+    private Double tasaEfectiva= 0.0; // TE %
+    private Double descuento= 0.0; // d %
+    private Double valorDescuento= 0.0;
+    private Double costeInicial = 0.0;
+    private Double costeFinal = 0.0;
+    private Double valorNeto= 0.0; // Val. Neto
+    private Double valorRecibir= 0.0; // Val. Rec.
+    private Double valorEntregado= 0.0; // Val. Ent.
+    private Double tceaPorcentaje= 0.0;// TCEA %
 
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
     }
+    public void sumCosteInicial(Double costeInicial) {
+        if (costeInicial != null) {
+            this.costeInicial += costeInicial;
+        }
+    }
 
+    public void sumCosteFinal(Double costeFinal) {
+        if (costeFinal != null) {
+            this.costeFinal += costeFinal;
+        }
+    }
+
+    public String getDocumentoId() {
+        return this.documentoId;
+    }
+
+    public void setDocumentoId(String documentoId) {
+        this.documentoId = documentoId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getNumeroConsulta() {
+        return numeroConsulta;
+    }
+
+    public void setNumeroConsulta(String numeroConsulta) {
+        this.numeroConsulta = numeroConsulta;
+    }
     public void CalcularDias(LocalDate fechaVencimiento, LocalDate fechaDescuento) {
-        this.dias= (int) ChronoUnit.DAYS.between(fechaDescuento, fechaVencimiento);
+        if (fechaVencimiento != null && fechaDescuento != null) {
+            this.dias = (int) ChronoUnit.DAYS.between(fechaDescuento, fechaVencimiento);
+        } else {
+            throw new IllegalArgumentException("FechaVencimiento y FechaDescuento no deben ser nulas");
+        }
     }
 
     public void CalcularTEDiasTasaNominal(double tasaNominal, int plazoDeTasa, int periodoCapital) {
@@ -60,7 +98,7 @@ public class ResultadosConsulta {
         this.valorDescuento = this.valorNomAplicando*this.descuento;
     }
     public void CaluclarValorNeto(){
-        this.valorNeto= this.valorNeto*(1-descuento);
+        this.valorNeto= this.valorNomAplicando*(1-descuento);
     }
     public void CalcularValorRecibir(){
         this.valorRecibir = this.valorNeto - this.retencion;

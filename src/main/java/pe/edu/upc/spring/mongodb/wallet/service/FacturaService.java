@@ -12,6 +12,7 @@ import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FacturaService {
@@ -22,10 +23,12 @@ public class FacturaService {
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
 
-    public List<Factura> getAllFacturas() {
-        return facturaRepository.findAll();
+    public List<FacturaDTO> getAllFacturas() {
+        List<Factura> facturas = facturaRepository.findAll();
+        return facturas.stream()
+                .map(Factura::toDTO)
+                .collect(Collectors.toList());
     }
-
     public Optional<Factura> getFacturaById(String id) {
         return facturaRepository.findById(id);
     }

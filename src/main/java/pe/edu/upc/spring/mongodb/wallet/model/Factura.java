@@ -39,4 +39,13 @@ public class Factura {
         this.id = IdGenerator.generateUniqueId();
     }
 
+    public static FacturaDTO toDTO(Factura factura){
+        FacturaDTO facturaDTO = new FacturaDTO();
+        facturaDTO.setFechaEmision(factura.getFechaEmision());
+        facturaDTO.setFechaPago(factura.getFechaPago());
+        facturaDTO.setTotalFacturado(factura.getTotalFacturado());
+        facturaDTO.setRetencion(factura.getRetencion());
+        return facturaDTO;
+    }
+
 }

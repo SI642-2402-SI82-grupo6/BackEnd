@@ -7,7 +7,7 @@ import pe.edu.upc.spring.mongodb.wallet.model.Factura;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-@EnableMongoRepositories
+
 public interface FacturaRepository extends MongoRepository<Factura, String> {
 
 }

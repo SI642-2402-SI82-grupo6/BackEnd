@@ -7,7 +7,7 @@ import pe.edu.upc.spring.mongodb.wallet.model.ResultadosCartera;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-@EnableMongoRepositories
+
 public interface ResultadosCarteraRepository extends MongoRepository<ResultadosCartera, String> {
     Optional<ResultadosCartera> findByUserId(String userId);
     void deleteByUserId(String userId);
