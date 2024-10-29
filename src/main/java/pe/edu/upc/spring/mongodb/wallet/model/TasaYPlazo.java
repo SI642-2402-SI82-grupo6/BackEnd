@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
@@ -30,6 +31,26 @@ public class TasaYPlazo {
     // Para Tasa Efectiva
     private Double tasaEfectiva; // %
     private Integer plazoEfectivo; // En meses o años
+    public TasaYPlazo(TasaYPlazoDTORequest tasaYPlazoDTORequest){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
+        this.tipoTasa = tasaYPlazoDTORequest.getTipoTasa();
+        if(this.tipoTasa == TipoTasa.NOMINAL){
+            this.tasaNominal = tasaYPlazoDTORequest.getTasaNominal();
+
+            this.plazoDeTasa = tasaYPlazoDTORequest.getPlazoDeTasa();
+            this.periodoCapital = tasaYPlazoDTORequest.getPeriodoCapital();
+            this.fechaDescuento = tasaYPlazoDTORequest.getFechaDescuento();
+        } else {
+            this.tasaEfectiva = tasaYPlazoDTORequest.getTasaEfectiva();
+            this.plazoEfectivo = tasaYPlazoDTORequest.getPlazoEfectivo();
+        }
+
+    }
 
     public TasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
