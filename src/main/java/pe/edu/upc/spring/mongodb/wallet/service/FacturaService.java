@@ -2,6 +2,7 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Factura;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
@@ -33,21 +34,25 @@ public class FacturaService {
         return facturaRepository.findById(id);
     }
 
-    public Factura createFactura(FacturaDTO facturaDTO) {
-        // Crear la nueva factura
-        Factura factura = new Factura(facturaDTO);
-        Factura savedFactura = facturaRepository.save(factura);
+    public MessageResponse createFactura(FacturaDTO facturaDTO) {
+        try {
+            // Verificar si ya existe una factura con el mismo userId
+            Factura factura = new Factura(facturaDTO);
+            Factura savedFactura = facturaRepository.save(factura);
+            // Guardar el ID de la factura en DocumentosCreados
+            DocumentosCreados documentoCreado = new DocumentosCreados(
+                    savedFactura.getUserId(),
+                    savedFactura.getId(),
+                    TipoDocumento.FACTURA,
+                    LocalDate.now()
+            );
+            documentosCreadosRepository.save(documentoCreado);
+            return new MessageResponse("Factura created successfully");
 
-        // Guardar el ID de la factura en DocumentosCreados
-        DocumentosCreados documentoCreado = new DocumentosCreados(
-                savedFactura.getUserId(),
-                savedFactura.getId(),
-                TipoDocumento.FACTURA,
-                LocalDate.now()
-        );
-        documentosCreadosRepository.save(documentoCreado);
+        } catch (Exception e) {
+            return new MessageResponse("Error creating Factura: " + e.getMessage());
+        }
 
-        return savedFactura;
     }
 
     public Optional<Factura> updateFactura(String id, Factura facturaDetails) {

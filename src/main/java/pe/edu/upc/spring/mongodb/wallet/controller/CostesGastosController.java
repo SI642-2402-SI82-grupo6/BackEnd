@@ -3,6 +3,7 @@ package pe.edu.upc.spring.mongodb.wallet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.CostesGastos;
 import pe.edu.upc.spring.mongodb.wallet.service.CostesGastosService;
@@ -17,8 +18,8 @@ public class CostesGastosController {
     private CostesGastosService costesGastosService;
 
     @PostMapping
-    public ResponseEntity<CostesGastos> crearCosteGasto(@RequestBody CostesGastosDTO costeGastoDTO) {
-        CostesGastos costesGastos = costesGastosService.createCostesGastos(costeGastoDTO);
+    public ResponseEntity<MessageResponse> crearCosteGasto(@RequestBody CostesGastosDTO costeGastoDTO) {
+        MessageResponse costesGastos = costesGastosService.createCostesGastos(costeGastoDTO);
         return ResponseEntity.ok(costesGastos);
     }
 

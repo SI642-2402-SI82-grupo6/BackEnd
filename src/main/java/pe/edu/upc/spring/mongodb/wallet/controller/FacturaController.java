@@ -3,6 +3,7 @@ package pe.edu.upc.spring.mongodb.wallet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Factura;
 import pe.edu.upc.spring.mongodb.wallet.service.FacturaService;
@@ -17,8 +18,8 @@ public class FacturaController {
     private FacturaService facturaService;
 
     @PostMapping
-    public ResponseEntity<Factura> crearFactura(@RequestBody FacturaDTO facturaDTO) {
-        Factura factura = facturaService.createFactura(facturaDTO);
+    public ResponseEntity<MessageResponse> crearFactura(@RequestBody FacturaDTO facturaDTO) {
+        MessageResponse factura = facturaService.createFactura(facturaDTO);
         return ResponseEntity.ok(factura);
     }
 

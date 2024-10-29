@@ -40,6 +40,8 @@ public class ResultadosConsultaService {
     public List<ResultadosConsultaDTO> calcularResultados() {
         List<DocumentosCreados> documentosCreados = documentosCreadosRepository.findAll();
 
+        ResultadosConsultaRepository.deleteAll();
+
 
         return documentosCreados.stream().map(documentoCreado -> {
             ResultadosConsulta resultadosConsulta = new ResultadosConsulta();
@@ -126,8 +128,7 @@ public class ResultadosConsultaService {
             ResultadosConsultaRepository.save(resultadosConsulta);
 
 
-            // Continue processing with the selected document
-            // ...
+
 
 
             return resultadosConsulta.toResultadosConsultaDTO();

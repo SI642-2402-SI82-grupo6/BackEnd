@@ -3,6 +3,7 @@ package pe.edu.upc.spring.mongodb.wallet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 import pe.edu.upc.spring.mongodb.wallet.service.LetraService;
@@ -17,8 +18,8 @@ public class LetraController {
     private LetraService letraService;
 
     @PostMapping
-    public ResponseEntity<Letra> crearLetra(@RequestBody LetraDTO letraDTO) {
-        Letra letra = letraService.createLetra(letraDTO);
+    public ResponseEntity<MessageResponse> crearLetra(@RequestBody LetraDTO letraDTO) {
+        MessageResponse letra = letraService.createLetra(letraDTO);
         return ResponseEntity.ok(letra);
     }
 

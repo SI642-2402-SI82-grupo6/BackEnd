@@ -3,6 +3,7 @@ package pe.edu.upc.spring.mongodb.wallet.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
 import pe.edu.upc.spring.mongodb.wallet.service.TasaYPlazoService;
@@ -17,9 +18,9 @@ public class TasaYPlazoController {
     private TasaYPlazoService tasaYPlazoService;
 
     @PostMapping
-    public ResponseEntity<TasaYPlazoDTO> crearTasaYPlazo(@RequestBody TasaYPlazoDTO tasaYPlazoDTO) {
+    public ResponseEntity<MessageResponse> crearTasaYPlazo(@RequestBody TasaYPlazoDTO tasaYPlazoDTO) {
 
-        TasaYPlazoDTO tasaYPlazo = tasaYPlazoService.createTasaYPlazo(tasaYPlazoDTO);
+        MessageResponse tasaYPlazo = tasaYPlazoService.createTasaYPlazo(tasaYPlazoDTO);
         return ResponseEntity.ok(tasaYPlazo);
     }
 

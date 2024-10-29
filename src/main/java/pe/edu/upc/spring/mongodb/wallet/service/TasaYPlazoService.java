@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
@@ -32,18 +33,26 @@ public class TasaYPlazoService {
             return Optional.empty();
         }
     }
-    public TasaYPlazoDTO createTasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO) {
-        TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
+    public MessageResponse createTasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO) {
 
-        // Check if a TasaYPlazo with the same userId already exists
-        Optional<TasaYPlazo> existingTasaYPlazo = tasaYPlazoRepository.findByUserId(tasaYPlazo.getUserId());
-        if (existingTasaYPlazo.isPresent()) {
-            throw new ResourceAlreadyExistsException("TasaYPlazo with userId " + tasaYPlazo.getUserId() + " already exists.");
+        try {
+            // Create a new TasaYPlazo
+            TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
+
+            // Check if a TasaYPlazo with the same userId already exists
+            Optional<TasaYPlazo> existingTasaYPlazo = tasaYPlazoRepository.findByUserId(tasaYPlazo.getUserId());
+            if (existingTasaYPlazo.isPresent()) {
+                return new MessageResponse("Error creating TasaYPlazo: TasaYPlazo with userId " + tasaYPlazo.getUserId() + " already exists");
+            }
+
+            // Save the new TasaYPlazo
+            tasaYPlazoRepository.save(tasaYPlazo);
+
+            return new MessageResponse("TasaYPlazo created successfully");
+        } catch (ResourceAlreadyExistsException e) {
+            return new MessageResponse("Error creating TasaYPlazo: " + e.getMessage());
         }
 
-        // Save the new TasaYPlazo
-        tasaYPlazoRepository.save(tasaYPlazo);
-        return tasaYPlazo.toDTO(tasaYPlazo);
     }
 
     public Optional<TasaYPlazo> updateTasaYPlazo(String id, TasaYPlazo tasaYPlazoDetails) {

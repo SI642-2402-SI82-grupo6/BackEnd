@@ -2,6 +2,7 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
@@ -29,24 +30,26 @@ public class LetraService {
     public Optional<Letra> getLetraById(String id) {
         return letraRepository.findById(id);
     }
+    public MessageResponse createLetra(LetraDTO letraDTO) {
+        try {
 
-    public Letra createLetra(LetraDTO letraDTO) {
-        // Crear la nueva letra
-        Letra letra = new Letra(letraDTO);
-        Letra savedLetra = letraRepository.save(letra);
+            Letra letra = new Letra(letraDTO);
+            Letra savedLetra = letraRepository.save(letra);
 
-        // Guardar el ID de la letra en DocumentosCreados
-        DocumentosCreados documentoCreado = new DocumentosCreados(
-                savedLetra.getUserId(),
-                savedLetra.getId(),
-                TipoDocumento.LETRA,
-                LocalDate.now()
-        );
-        documentosCreadosRepository.save(documentoCreado);
 
-        return savedLetra;
+            DocumentosCreados documentoCreado = new DocumentosCreados(
+                    savedLetra.getUserId(),
+                    savedLetra.getId(),
+                    TipoDocumento.LETRA,
+                    LocalDate.now()
+            );
+            documentosCreadosRepository.save(documentoCreado);
+
+            return new MessageResponse("Letra created successfully");
+        } catch (Exception e) {
+            return new MessageResponse("Error creating Letra: " + e.getMessage());
+        }
     }
-
     public Optional<Letra> updateLetra(String id, Letra letraDetails) {
         return letraRepository.findById(id).map(letra -> {
             letraDetails.setId(id);

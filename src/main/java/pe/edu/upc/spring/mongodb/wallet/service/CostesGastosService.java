@@ -2,6 +2,7 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.CostesGastos;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
@@ -28,15 +29,21 @@ public class CostesGastosService {
         return costesGastosRepository.findById(id);
     }
 
-    public CostesGastos createCostesGastos(CostesGastosDTO costesGastos) {
-        Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();
-        if (!lastCreatedDoc.isPresent()) {
-            throw new RuntimeException("No DocumentosCreados found.");
+    public MessageResponse createCostesGastos(CostesGastosDTO costesGastos) {
+        try {
+            Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();
+            if (!lastCreatedDoc.isPresent()) {
+                return new MessageResponse("Error creating CostesGastos: No documents created yet");
+            }
+            String documentoId = lastCreatedDoc.get().getDocumentoId();
+            CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
+            costesGastosEntity.setDocumentoId(documentoId);
+
+            costesGastosRepository.save(costesGastosEntity);
+            return new MessageResponse("CostesGastos created successfully");
+        } catch (Exception e) {
+            return new MessageResponse("Error creating CostesGastos: " + e.getMessage());
         }
-        String documentoId = lastCreatedDoc.get().getDocumentoId();
-        CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
-        costesGastosEntity.setDocumentoId(documentoId);
-        return costesGastosRepository.save(costesGastosEntity);
     }
 
     public Optional<CostesGastos> updateCostesGastos(String id, CostesGastos costesGastosDetails) {
