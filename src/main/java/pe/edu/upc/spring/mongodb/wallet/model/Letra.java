@@ -39,4 +39,13 @@ public class Letra {
         this.id = IdGenerator.generateUniqueId();
     }
 
+    public LetraDTO toDTO(){
+        LetraDTO letraDTO = new LetraDTO();
+        letraDTO.setFechaGiro(this.fechaGiro);
+        letraDTO.setFechaVencimiento(this.fechaVencimiento);
+        letraDTO.setValorNominal(this.valorNominal);
+        letraDTO.setRetencion(this.retencion);
+        return letraDTO;
+    }
+
 }

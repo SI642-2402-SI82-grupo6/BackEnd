@@ -23,8 +23,11 @@ public class LetraService {
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
 
-    public List<Letra> getAllLetras() {
-        return letraRepository.findAll();
+    public List<LetraDTO> getAllLetras() {
+        List<Letra> letras= letraRepository.findAll();
+        return letras.stream()
+                .map(Letra::toDTO)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     public Optional<Letra> getLetraById(String id) {

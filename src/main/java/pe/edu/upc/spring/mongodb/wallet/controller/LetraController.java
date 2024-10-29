@@ -24,8 +24,8 @@ public class LetraController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Letra>> obtenerTodasLetras() {
-        List<Letra> letras = letraService.getAllLetras();
+    public ResponseEntity<List<LetraDTO>> obtenerTodasLetras() {
+        List<LetraDTO> letras = letraService.getAllLetras();
         return ResponseEntity.ok(letras);
     }
 
