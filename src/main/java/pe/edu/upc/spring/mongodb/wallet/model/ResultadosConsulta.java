@@ -124,7 +124,9 @@ public class ResultadosConsulta {
         } else {
             this.userId = principal.toString();
         }
+
         ResultadosConsultaDTO resultadosConsultaDTO = new ResultadosConsultaDTO();
+        resultadosConsultaDTO.setId(this.id);
         resultadosConsultaDTO.setNumeroConsulta(this.numeroConsulta);
         resultadosConsultaDTO.setFechaGiro(this.fechaGiro);
         resultadosConsultaDTO.setValorNomAplicando(this.valorNomAplicando);

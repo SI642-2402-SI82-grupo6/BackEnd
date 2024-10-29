@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class FacturaDTO {
+    private String id; // ID de la letra
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaEmision; // Fecha de emisión (FE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

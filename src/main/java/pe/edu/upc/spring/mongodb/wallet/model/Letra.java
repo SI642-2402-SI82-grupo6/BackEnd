@@ -40,7 +40,9 @@ public class Letra {
     }
 
     public LetraDTO toDTO(){
+
         LetraDTO letraDTO = new LetraDTO();
+        letraDTO.setId(this.id);
         letraDTO.setFechaGiro(this.fechaGiro);
         letraDTO.setFechaVencimiento(this.fechaVencimiento);
         letraDTO.setValorNominal(this.valorNominal);

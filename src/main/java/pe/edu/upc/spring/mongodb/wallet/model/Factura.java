@@ -40,7 +40,9 @@ public class Factura {
     }
 
     public static FacturaDTO toDTO(Factura factura){
+
         FacturaDTO facturaDTO = new FacturaDTO();
+        facturaDTO.setId(factura.getId());
         facturaDTO.setFechaEmision(factura.getFechaEmision());
         facturaDTO.setFechaPago(factura.getFechaPago());
         facturaDTO.setTotalFacturado(factura.getTotalFacturado());

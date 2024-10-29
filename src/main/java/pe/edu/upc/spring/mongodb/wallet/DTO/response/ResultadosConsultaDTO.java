@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class ResultadosConsultaDTO {
+    private String id; // ID
     private String numeroConsulta; // Nº de consulta
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaGiro; // Fecha Giro

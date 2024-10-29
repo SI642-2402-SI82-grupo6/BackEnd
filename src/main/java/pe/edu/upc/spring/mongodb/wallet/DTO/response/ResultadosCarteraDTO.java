@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class ResultadosCarteraDTO {
+    private String id; // ID
     private Double valorTotalRecibir; // VR: Valor Total a Recibir por la cartera
     private Double tcea; // TCEA: Tasa de Coste Efectiva Anual de la cartera
 

@@ -36,6 +36,7 @@ public class ResultadosCartera {
             this.userId = principal.toString();
         }
         ResultadosCarteraDTO resultadosCarteraDTO = new ResultadosCarteraDTO();
+        resultadosCarteraDTO.setId(this.id);
         resultadosCarteraDTO.setValorTotalRecibir(this.valorTotalRecibir);
         resultadosCarteraDTO.setTcea(this.tcea);
         return resultadosCarteraDTO;
