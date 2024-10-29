@@ -42,4 +42,12 @@ public class CostesGastos {
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
     }
+    public CostesGastosDTO toDTO() {
+        CostesGastosDTO costesGastosDTO = new CostesGastosDTO();
+        costesGastosDTO.setId(this.id);
+        costesGastosDTO.setTipoGasto(this.tipoGasto);
+        costesGastosDTO.setMotivoGasto(this.motivoGasto);
+        costesGastosDTO.setValorExpresado(this.valorExpresado);
+        return costesGastosDTO;
+    }
 }

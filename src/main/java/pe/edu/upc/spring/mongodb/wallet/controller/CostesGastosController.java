@@ -30,7 +30,7 @@ public class CostesGastosController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CostesGastos> obtenerCosteGastoPorId(@PathVariable String id) {
+    public ResponseEntity<CostesGastosDTO> obtenerCosteGastoPorId(@PathVariable String id) {
         return costesGastosService.getCosteGastoById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -44,7 +44,8 @@ public class CostesGastosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCosteGasto(@PathVariable String id) {
-        return costesGastosService.deleteCostesGastos(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<MessageResponse>  eliminarCosteGasto(@PathVariable String id) {
+        MessageResponse mensaje=costesGastosService.deleteCostesGastos(id);
+        return ResponseEntity.ok(mensaje);
     }
 }

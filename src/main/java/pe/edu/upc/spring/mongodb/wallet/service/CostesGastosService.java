@@ -25,9 +25,7 @@ public class CostesGastosService {
         return costesGastosRepository.findAll();
     }
 
-    public Optional<CostesGastos> getCostesGastosById(String id) {
-        return costesGastosRepository.findById(id);
-    }
+
 
     public MessageResponse createCostesGastos(CostesGastosDTO costesGastos) {
         try {
@@ -53,15 +51,16 @@ public class CostesGastosService {
         });
     }
 
-    public boolean deleteCostesGastos(String id) {
+    public MessageResponse deleteCostesGastos(String id) {
         if (costesGastosRepository.existsById(id)) {
             costesGastosRepository.deleteById(id);
-            return true;
+            return new MessageResponse("CostesGastos deleted successfully");
         }
-        return false;
+        return new MessageResponse("Error deleting CostesGastos: CostesGastos not found");
     }
-    public Optional<CostesGastos> getCosteGastoById(String id) {
-        return costesGastosRepository.findById(id);
+    public Optional<CostesGastosDTO> getCosteGastoById(String id) {
+        Optional<CostesGastos> costesGastosDTO=  costesGastosRepository.findById(id);
+        return costesGastosDTO.map(CostesGastos::toDTO);
     }
 
 

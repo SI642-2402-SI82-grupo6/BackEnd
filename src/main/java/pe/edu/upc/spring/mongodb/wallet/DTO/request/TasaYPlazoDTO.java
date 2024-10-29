@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 public class TasaYPlazoDTO {
+    private String id; // ID
     private TipoTasa tipoTasa; // Tipo de tasa: efectiva o nominal
     private Double tasaNominal; // %
 

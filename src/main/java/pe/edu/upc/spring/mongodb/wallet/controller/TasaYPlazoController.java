@@ -45,8 +45,9 @@ public class TasaYPlazoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarTasaYPlazo(@PathVariable String id) {
-        return tasaYPlazoService.deleteTasaYPlazo(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<MessageResponse> eliminarTasaYPlazo(@PathVariable String id) {
+        MessageResponse tasaYPlazo= tasaYPlazoService.deleteTasaYPlazo(id);
+        return ResponseEntity.ok(tasaYPlazo);
     }
     @DeleteMapping()
     public ResponseEntity<Void> eliminarTasaYPlazoPorUserId() {

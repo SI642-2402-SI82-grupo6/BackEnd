@@ -30,8 +30,9 @@ public class LetraService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    public Optional<Letra> getLetraById(String id) {
-        return letraRepository.findById(id);
+    public Optional<LetraDTO> getLetraById(String id) {
+        Optional<Letra> letras =letraRepository.findById(id);
+        return letras.map(Letra::toDTO);
     }
     public MessageResponse createLetra(LetraDTO letraDTO) {
         try {
@@ -60,11 +61,12 @@ public class LetraService {
         });
     }
 
-    public boolean deleteLetra(String id) {
+    public MessageResponse deleteLetra(String id) {
         if (letraRepository.existsById(id)) {
             letraRepository.deleteById(id);
-            return true;
+            return new MessageResponse("Letra deleted successfully");
+
         }
-        return false;
+        return new MessageResponse("Error deleting Letra: Letra not found");
     }
 }

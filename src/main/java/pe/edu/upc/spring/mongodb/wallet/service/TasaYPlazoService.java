@@ -63,13 +63,13 @@ public class TasaYPlazoService {
         });
     }
 
-    public boolean deleteTasaYPlazo(String id) {
+    public MessageResponse deleteTasaYPlazo(String id) {
 
         if (tasaYPlazoRepository.existsById(id)) {
             tasaYPlazoRepository.deleteById(id);
-            return true;
+            return new MessageResponse("TasaYPlazo deleted successfully");
         }
-        return false;
+        return new MessageResponse("Error deleting TasaYPlazo: TasaYPlazo not found");
     }
     public List<TasaYPlazo> getAllTasasYPlazos() {
         return tasaYPlazoRepository.findAll();

@@ -30,7 +30,7 @@ public class FacturaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Factura> obtenerFacturaPorId(@PathVariable String id) {
+    public ResponseEntity<FacturaDTO> obtenerFacturaPorId(@PathVariable String id) {
         return facturaService.getFacturaById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -44,7 +44,9 @@ public class FacturaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarFactura(@PathVariable String id) {
-        return facturaService.deleteFactura(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<MessageResponse> eliminarFactura(@PathVariable String id) {
+        MessageResponse factura = facturaService.deleteFactura(id);
+        return ResponseEntity.ok(factura);
+
     }
 }

@@ -30,7 +30,7 @@ public class LetraController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Letra> obtenerLetraPorId(@PathVariable String id) {
+    public ResponseEntity<LetraDTO> obtenerLetraPorId(@PathVariable String id) {
         return letraService.getLetraById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -44,7 +44,8 @@ public class LetraController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarLetra(@PathVariable String id) {
-        return letraService.deleteLetra(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<MessageResponse> eliminarLetra(@PathVariable String id) {
+        MessageResponse letra = letraService.deleteLetra(id);
+        return ResponseEntity.ok(letra);
     }
 }

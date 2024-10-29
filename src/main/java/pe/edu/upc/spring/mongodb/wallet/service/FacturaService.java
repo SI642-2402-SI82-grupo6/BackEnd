@@ -30,8 +30,9 @@ public class FacturaService {
                 .map(Factura::toDTO)
                 .collect(Collectors.toList());
     }
-    public Optional<Factura> getFacturaById(String id) {
-        return facturaRepository.findById(id);
+    public Optional<FacturaDTO> getFacturaById(String id) {
+        Optional<Factura> letras = facturaRepository.findById(id);
+        return letras.map(Factura::toDTO);
     }
 
     public MessageResponse createFactura(FacturaDTO facturaDTO) {
@@ -62,11 +63,11 @@ public class FacturaService {
         });
     }
 
-    public boolean deleteFactura(String id) {
+    public MessageResponse deleteFactura(String id) {
         if (facturaRepository.existsById(id)) {
             facturaRepository.deleteById(id);
-            return true;
+            return new MessageResponse("Factura deleted successfully");
         }
-        return false;
+        return new MessageResponse("Error deleting Factura: Factura not found");
     }
 }
