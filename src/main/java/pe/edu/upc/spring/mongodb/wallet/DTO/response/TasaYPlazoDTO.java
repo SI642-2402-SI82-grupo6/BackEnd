@@ -1,11 +1,10 @@
-package pe.edu.upc.spring.mongodb.wallet.DTO.request;
+package pe.edu.upc.spring.mongodb.wallet.DTO.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 public class TasaYPlazoDTO {

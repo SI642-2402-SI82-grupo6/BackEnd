@@ -3,7 +3,8 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTORequest;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
@@ -34,7 +35,7 @@ public class LetraService {
         Optional<Letra> letras =letraRepository.findById(id);
         return letras.map(Letra::toDTO);
     }
-    public MessageResponse createLetra(LetraDTO letraDTO) {
+    public MessageResponse createLetra(LetraDTORequest letraDTO) {
         try {
 
             Letra letra = new Letra(letraDTO);

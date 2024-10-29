@@ -6,7 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTORequest;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
 import java.time.LocalDate;
@@ -35,6 +36,18 @@ public class Letra {
         this.valorNominal = letraDTO.getValorNominal();
         this.retencion = letraDTO.getRetencion();
     }
+    public Letra(LetraDTORequest letraDTORequest ){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
+        this.fechaGiro = letraDTORequest.getFechaGiro();
+        this.fechaVencimiento = letraDTORequest.getFechaVencimiento();
+        this.valorNominal = letraDTORequest.getValorNominal();
+        this.retencion = letraDTORequest.getRetencion();
+    }
     public void setId(){
         this.id = IdGenerator.generateUniqueId();
     }
@@ -48,6 +61,15 @@ public class Letra {
         letraDTO.setValorNominal(this.valorNominal);
         letraDTO.setRetencion(this.retencion);
         return letraDTO;
+    }
+    public LetraDTORequest toDTORequest(){
+
+        LetraDTORequest letraDTORequest = new LetraDTORequest();
+        letraDTORequest.setFechaGiro(this.fechaGiro);
+        letraDTORequest.setFechaVencimiento(this.fechaVencimiento);
+        letraDTORequest.setValorNominal(this.valorNominal);
+        letraDTORequest.setRetencion(this.retencion);
+        return letraDTORequest;
     }
 
 }

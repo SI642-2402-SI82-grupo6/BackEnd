@@ -6,12 +6,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor

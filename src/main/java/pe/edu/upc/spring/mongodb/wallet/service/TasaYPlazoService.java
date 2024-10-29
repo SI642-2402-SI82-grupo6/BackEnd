@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
 import pe.edu.upc.spring.mongodb.wallet.repository.TasaYPlazoRepository;

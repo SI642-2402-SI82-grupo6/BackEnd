@@ -3,7 +3,8 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTORequest;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.Factura;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
@@ -35,7 +36,7 @@ public class FacturaService {
         return letras.map(Factura::toDTO);
     }
 
-    public MessageResponse createFactura(FacturaDTO facturaDTO) {
+    public MessageResponse createFactura(FacturaDTORequest facturaDTO) {
         try {
             // Verificar si ya existe una factura con el mismo userId
             Factura factura = new Factura(facturaDTO);

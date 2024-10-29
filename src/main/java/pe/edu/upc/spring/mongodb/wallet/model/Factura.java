@@ -6,7 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTORequest;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
 import java.time.LocalDate;
@@ -48,6 +49,28 @@ public class Factura {
         facturaDTO.setTotalFacturado(factura.getTotalFacturado());
         facturaDTO.setRetencion(factura.getRetencion());
         return facturaDTO;
+    }
+
+    public Factura(FacturaDTORequest facturaDTORequest){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            this.userId = ((UserDetails) principal).getUsername();
+        } else {
+            this.userId = principal.toString();
+        }
+        this.fechaEmision = facturaDTORequest.getFechaEmision();
+        this.fechaPago = facturaDTORequest.getFechaPago();
+        this.totalFacturado = facturaDTORequest.getTotalFacturado();
+        this.retencion = facturaDTORequest.getRetencion();
+    }
+    public FacturaDTORequest toDTORequest(){
+
+        FacturaDTORequest facturaDTORequest = new FacturaDTORequest();
+        facturaDTORequest.setFechaEmision(this.fechaEmision);
+        facturaDTORequest.setFechaPago(this.fechaPago);
+        facturaDTORequest.setTotalFacturado(this.totalFacturado);
+        facturaDTORequest.setRetencion(this.retencion);
+        return facturaDTORequest;
     }
 
 }

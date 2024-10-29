@@ -2,11 +2,10 @@ package pe.edu.upc.spring.mongodb.wallet.DTO.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 @Data
-public class FacturaDTO {
-    private String id; // ID de la letra
+public class FacturaDTORequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaEmision; // Fecha de emisión (FE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

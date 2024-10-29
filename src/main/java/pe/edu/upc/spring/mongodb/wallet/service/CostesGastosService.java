@@ -3,7 +3,8 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
-import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTO;
+import pe.edu.upc.spring.mongodb.wallet.DTO.request.CostesGastosDTORequest;
+import pe.edu.upc.spring.mongodb.wallet.DTO.response.CostesGastosDTO;
 import pe.edu.upc.spring.mongodb.wallet.model.CostesGastos;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.repository.CostesGastosRepository;
@@ -27,7 +28,7 @@ public class CostesGastosService {
 
 
 
-    public MessageResponse createCostesGastos(CostesGastosDTO costesGastos) {
+    public MessageResponse createCostesGastos(CostesGastosDTORequest costesGastos) {
         try {
             Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();
             if (!lastCreatedDoc.isPresent()) {
