@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pe.edu.upc.spring.mongodb.security.security.jwt.AuthEntryPointJwt;
 import pe.edu.upc.spring.mongodb.security.security.jwt.AuthTokenFilter;
 import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsServiceImpl;
@@ -27,7 +29,7 @@ import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsServiceIm
 //(securedEnabled = true,
 //jsr250Enabled = true,
 //prePostEnabled = true) // by default
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig implements WebMvcConfigurer { // extends WebSecurityConfigurerAdapter {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -38,6 +40,14 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+            .allowedOrigins("http://localhost:5173") // Cambia esto al origen de tu frontend
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true); // Si estás usando cookies o autenticación
+  }
 
 //  @Override
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -47,19 +57,20 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-       
+
       authProvider.setUserDetailsService(userDetailsService);
       authProvider.setPasswordEncoder(passwordEncoder());
-   
+
       return authProvider;
   }
-  
+
 //  @Bean
 //  @Override
 //  public AuthenticationManager authenticationManagerBean() throws Exception {
 //    return super.authenticationManagerBean();
 //  }
-  
+
+
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
