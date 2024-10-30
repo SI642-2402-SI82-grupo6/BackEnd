@@ -18,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pe.edu.upc.spring.mongodb.security.security.jwt.AuthEntryPointJwt;
 import pe.edu.upc.spring.mongodb.security.security.jwt.AuthTokenFilter;
 import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsServiceImpl;
@@ -29,7 +28,7 @@ import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsServiceIm
 //(securedEnabled = true,
 //jsr250Enabled = true,
 //prePostEnabled = true) // by default
-public class WebSecurityConfig implements WebMvcConfigurer { // extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -40,14 +39,7 @@ public class WebSecurityConfig implements WebMvcConfigurer { // extends WebSecur
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173") // Cambia esto al origen de tu frontend
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .allowedHeaders("*")
-            .allowCredentials(true); // Si estás usando cookies o autenticación
-  }
+
 
 //  @Override
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -96,19 +88,11 @@ public class WebSecurityConfig implements WebMvcConfigurer { // extends WebSecur
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth ->
-          auth.requestMatchers("/api/auth/**","v3/api-docs/swagger-config","/error").permitAll()
-              .requestMatchers("/api/test/**").permitAll()
-                  .requestMatchers("/v3/api-docs/**").permitAll()
-                  .requestMatchers("/swagger-ui/**").permitAll()
-                  .requestMatchers("/swagger-resources/**").permitAll()
-                  .requestMatchers("/webjars/**").permitAll()
-                  .requestMatchers("/swagger-ui.html").permitAll()
-
-                  .anyRequest().authenticated()
-        );
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth ->
+                    auth.anyRequest().permitAll() // Permitir todas las solicitudes
+            );
 
     http.authenticationProvider(authenticationProvider());
 
@@ -116,4 +100,5 @@ public class WebSecurityConfig implements WebMvcConfigurer { // extends WebSecur
 
     return http.build();
   }
+
 }
