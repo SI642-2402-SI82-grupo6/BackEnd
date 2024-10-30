@@ -49,4 +49,9 @@ public class CostesGastosController {
         MessageResponse mensaje=costesGastosService.deleteCostesGastos(id);
         return ResponseEntity.ok(mensaje);
     }
+    @DeleteMapping
+    public ResponseEntity<MessageResponse>  eliminarTodosCostesGastos() {
+        MessageResponse mensaje=costesGastosService.deleteAllCostesGastos();
+        return ResponseEntity.ok(mensaje);
+    }
 }

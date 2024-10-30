@@ -64,5 +64,10 @@ public class CostesGastosService {
         return costesGastosDTO.map(CostesGastos::toDTO);
     }
 
+    public MessageResponse deleteAllCostesGastos() {
+        costesGastosRepository.deleteAll();
+        return new MessageResponse("All CostesGastos deleted successfully");
+    }
+
 
 }
