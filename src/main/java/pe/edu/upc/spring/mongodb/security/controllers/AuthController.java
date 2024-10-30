@@ -29,6 +29,7 @@ import pe.edu.upc.spring.mongodb.security.models.Role;
 import pe.edu.upc.spring.mongodb.security.models.User;
 import pe.edu.upc.spring.mongodb.security.payload.request.LoginRequest;
 import pe.edu.upc.spring.mongodb.security.payload.request.SignupRequest;
+import pe.edu.upc.spring.mongodb.security.payload.response.JwtResponse;
 import pe.edu.upc.spring.mongodb.security.payload.response.UserInfoResponse;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.security.repository.RoleRepository;
@@ -61,23 +62,24 @@ public class AuthController {
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+    String jwt = jwtUtils.generateTokenFromUsername(userDetails.getUsername()); // Use generateTokenFromUsername
 
     List<String> roles = userDetails.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.toList());
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
 
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
-                                   userDetails.getEmail(),
-                                   roles));
+    return ResponseEntity.ok()
+            .body(new JwtResponse(jwt, // Include the token in the response
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    roles));
   }
 
   @PostMapping("/signup")
