@@ -88,11 +88,19 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth ->
-                    auth.anyRequest().permitAll() // Permitir todas las solicitudes
-            );
+        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth ->
+          auth.requestMatchers("/api/auth/**","v3/api-docs/swagger-config","/error").permitAll()
+              .requestMatchers("/api/test/**").permitAll()
+                  .requestMatchers("/v3/api-docs/**").permitAll()
+                  .requestMatchers("/swagger-ui/**").permitAll()
+                  .requestMatchers("/swagger-resources/**").permitAll()
+                  .requestMatchers("/webjars/**").permitAll()
+                  .requestMatchers("/swagger-ui.html").permitAll()
+
+                  .anyRequest().authenticated()
+        );
 
     http.authenticationProvider(authenticationProvider());
 
@@ -100,5 +108,4 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
     return http.build();
   }
-
 }
