@@ -48,6 +48,7 @@ public class TasaYPlazo {
         } else {
             this.tasaEfectiva = tasaYPlazoDTORequest.getTasaEfectiva();
             this.plazoEfectivo = tasaYPlazoDTORequest.getPlazoEfectivo();
+            this.fechaDescuento = tasaYPlazoDTORequest.getFechaDescuento();
         }
 
     }
