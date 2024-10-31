@@ -76,6 +76,7 @@ public class ResultadosCarteraService {
 
             // Convertir a DTO
             ResultadosCarteraDTO resultadosCarteraDTO = new ResultadosCarteraDTO();
+            resultadosCarteraDTO.setId(resultadosCartera.getId());
             resultadosCarteraDTO.setValorTotalRecibir(resultadosCartera.getValorTotalRecibir());
             resultadosCarteraDTO.setTcea(resultadosCartera.getTcea());
             return resultadosCarteraDTO;
