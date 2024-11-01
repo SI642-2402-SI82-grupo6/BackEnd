@@ -116,6 +116,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.addAllowedOrigin("http://localhost:5173");
+    config.addAllowedOrigin("https://frontend-finance-1becd3f49748.herokuapp.com");
     config.addAllowedOrigin("https://6724592e2282d8000829133b--financegrupo6.netlify.app");
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
@@ -128,6 +129,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
     config.addAllowedOrigin("http://localhost:5173");
+    config.addAllowedOrigin("https://frontend-finance-1becd3f49748.herokuapp.com");
     config.addAllowedOrigin("https://6724592e2282d8000829133b--financegrupo6.netlify.app");
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
