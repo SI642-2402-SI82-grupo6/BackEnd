@@ -126,6 +126,7 @@ public class ResultadosConsulta {
         }
 
         ResultadosConsultaDTO resultadosConsultaDTO = new ResultadosConsultaDTO();
+        resultadosConsultaDTO.setDocumentoId(this.documentoId);
         resultadosConsultaDTO.setId(this.id);
         resultadosConsultaDTO.setNumeroConsulta(this.numeroConsulta);
         resultadosConsultaDTO.setFechaGiro(this.fechaGiro);
