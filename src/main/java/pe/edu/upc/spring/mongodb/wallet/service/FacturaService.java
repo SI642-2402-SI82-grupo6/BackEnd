@@ -67,6 +67,7 @@ public class FacturaService {
     public MessageResponse deleteFactura(String id) {
         if (facturaRepository.existsById(id)) {
             facturaRepository.deleteById(id);
+            documentosCreadosRepository.deleteByDocumentoId(id);
             return new MessageResponse("Factura deleted successfully");
         }
         return new MessageResponse("Error deleting Factura: Factura not found");

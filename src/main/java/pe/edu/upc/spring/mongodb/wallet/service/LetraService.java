@@ -21,6 +21,7 @@ public class LetraService {
     @Autowired
     private LetraRepository letraRepository;
 
+
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
 
@@ -63,10 +64,11 @@ public class LetraService {
     }
 
     public MessageResponse deleteLetra(String id) {
+
         if (letraRepository.existsById(id)) {
             letraRepository.deleteById(id);
+            documentosCreadosRepository.deleteByDocumentoId(id);
             return new MessageResponse("Letra deleted successfully");
-
         }
         return new MessageResponse("Error deleting Letra: Letra not found");
     }
