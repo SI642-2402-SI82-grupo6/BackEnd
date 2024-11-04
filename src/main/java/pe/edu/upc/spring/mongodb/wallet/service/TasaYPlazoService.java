@@ -43,9 +43,8 @@ public class TasaYPlazoService {
             // Check if a TasaYPlazo with the same userId already exists
             Optional<TasaYPlazo> existingTasaYPlazo = tasaYPlazoRepository.findByUserId(tasaYPlazo.getUserId());
             if (existingTasaYPlazo.isPresent()) {
-                return new MessageResponse("Error creating TasaYPlazo: TasaYPlazo with userId " + tasaYPlazo.getUserId() + " already exists");
+                tasaYPlazoRepository.deleteByUserId(tasaYPlazo.getUserId());
             }
-
             // Save the new TasaYPlazo
             tasaYPlazoRepository.save(tasaYPlazo);
 
