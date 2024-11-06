@@ -17,18 +17,9 @@ public class ResultadosCarteraController {
     @Autowired
     private ResultadosCarteraService resultadosCarteraService;
 
-    private String getUserIdFromPrincipal() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
-    }
-
     @GetMapping("/consultar")
     public ResponseEntity<ResultadosCarteraDTO> consultarCartera() {
-        String userId = getUserIdFromPrincipal();
+
         ResultadosCarteraDTO resultadosCarteraDTO = resultadosCarteraService.consultarCartera();
         return ResponseEntity.ok(resultadosCarteraDTO);
     }

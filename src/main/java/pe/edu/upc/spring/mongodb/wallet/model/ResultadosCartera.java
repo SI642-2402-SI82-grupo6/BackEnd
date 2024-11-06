@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosCarteraDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
 
@@ -30,8 +31,8 @@ public class ResultadosCartera {
 
     public ResultadosCarteraDTO toResultadosCarteraDTO(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            this.userId = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDetailsImpl) {
+            this.userId = ((UserDetailsImpl) principal).getId();
         } else {
             this.userId = principal.toString();
         }

@@ -19,9 +19,15 @@ public class FacturaController {
     private FacturaService facturaService;
 
     @PostMapping
-    public ResponseEntity<MessageResponse> crearFactura(@RequestBody FacturaDTORequest facturaDTO) {
-        MessageResponse factura = facturaService.createFactura(facturaDTO);
-        return ResponseEntity.ok(factura);
+    public ResponseEntity<?> crearFactura(@RequestBody FacturaDTORequest facturaDTO) {
+        try {
+            MessageResponse response = facturaService.createFactura(facturaDTO);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error en los datos de la factura."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 
     @GetMapping
@@ -38,16 +44,28 @@ public class FacturaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Factura> actualizarFactura(@PathVariable String id, @RequestBody FacturaDTO facturaDTO) {
-        return facturaService.updateFactura(id, new Factura(facturaDTO))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> actualizarFactura(@PathVariable String id, @RequestBody FacturaDTO facturaDTO) {
+        try {
+            Factura updatedFactura = facturaService.updateFactura(id, new Factura(facturaDTO))
+                    .orElseThrow(() -> new IllegalArgumentException("Factura no encontrada"));
+            return ResponseEntity.ok(updatedFactura);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> eliminarFactura(@PathVariable String id) {
-        MessageResponse factura = facturaService.deleteFactura(id);
-        return ResponseEntity.ok(factura);
-
+        try {
+            MessageResponse response = facturaService.deleteFactura(id);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(new MessageResponse("Factura no encontrada."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 }
+

@@ -18,8 +18,9 @@ public class ResultadosConsultaController {
     private ResultadosConsultaService resultadosConsultaService;
 
     @PostMapping
-    public List<ResultadosConsultaDTO> calcularResultados() {
-        return resultadosConsultaService.calcularResultados();
+    public ResponseEntity<ResultadosConsultaDTO> calcularResultados(@PathVariable String documentoId) {
+        ResultadosConsultaDTO resultadosConsultaDTO = resultadosConsultaService.consultarResultadoPorDocumentoId(documentoId);
+        return ResponseEntity.ok(resultadosConsultaDTO);
     }
 
 }

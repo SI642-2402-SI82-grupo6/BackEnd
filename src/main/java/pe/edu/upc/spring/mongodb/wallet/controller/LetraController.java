@@ -19,13 +19,19 @@ public class LetraController {
     private LetraService letraService;
 
     @PostMapping
-    public ResponseEntity<MessageResponse> crearLetra(@RequestBody LetraDTORequest letraDTO) {
-        MessageResponse letra = letraService.createLetra(letraDTO);
-        return ResponseEntity.ok(letra);
+    public ResponseEntity<?> crearLetra(@RequestBody LetraDTORequest letraDTO) {
+        try {
+            MessageResponse response = letraService.createLetra(letraDTO);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Datos de la letra incorrectos."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<LetraDTO>> obtenerTodasLetras() {
+    public ResponseEntity<?> obtenerTodasLetras() {
         List<LetraDTO> letras = letraService.getAllLetras();
         return ResponseEntity.ok(letras);
     }
@@ -38,15 +44,27 @@ public class LetraController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Letra> actualizarLetra(@PathVariable String id, @RequestBody LetraDTO letraDTO) {
-        return letraService.updateLetra(id, new Letra(letraDTO))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> actualizarLetra(@PathVariable String id, @RequestBody LetraDTO letraDTO) {
+        try {
+            Letra updatedLetra = letraService.updateLetra(id, new Letra(letraDTO))
+                    .orElseThrow(() -> new IllegalArgumentException("Letra no encontrada."));
+            return ResponseEntity.ok(updatedLetra);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(new MessageResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> eliminarLetra(@PathVariable String id) {
-        MessageResponse letra = letraService.deleteLetra(id);
-        return ResponseEntity.ok(letra);
+    public ResponseEntity<?> eliminarLetra(@PathVariable String id) {
+        try {
+            MessageResponse response = letraService.deleteLetra(id);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(new MessageResponse("Letra con ID " + id + " no encontrada."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
+        }
     }
 }
