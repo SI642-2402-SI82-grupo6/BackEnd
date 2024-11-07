@@ -60,6 +60,7 @@ public class LetraService {
     public Optional<Letra> updateLetra(String id, Letra letraDetails) {
         return letraRepository.findById(id).map(letra -> {
             letraDetails.setId(id);
+            resultadosConsultaService.consultarResultadoPorDocumentoId(id);
             return letraRepository.save(letraDetails);
         });
     }
@@ -69,6 +70,7 @@ public class LetraService {
         if (letraRepository.existsById(id)) {
             letraRepository.deleteById(id);
             documentosCreadosRepository.deleteByDocumentoId(id);
+            resultadosConsultaService.deleteResultadosConsultaPorDocumentoId(id);
             return new MessageResponse("Letra deleted successfully");
         }
         return new MessageResponse("Error deleting Letra: Letra not found");

@@ -121,6 +121,9 @@ public class ResultadosConsultaService {
 
         resultadosConsulta.toResultadosConsultaDTO();
     }
+    public void deleteResultadosConsultaPorDocumentoId(String id) {
+        ResultadosConsultaRepository.deleteByDocumentoId(id);
+    }
 
         public List<ResultadosConsultaDTO> obtenerResultados() {
             List<ResultadosConsulta> resultadosConsulta = ResultadosConsultaRepository.findAll();

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ResultadosConsultaRepository extends MongoRepository<ResultadosConsulta, String> {
     List<ResultadosConsulta> findByUserId(String userId);
     Optional<ResultadosConsulta> findByDocumentoId(String documentoId);
+    void deleteByDocumentoId(String documentoId);
    }

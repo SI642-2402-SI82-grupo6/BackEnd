@@ -62,6 +62,7 @@ public class FacturaService {
     public Optional<Factura> updateFactura(String id, Factura facturaDetails) {
         return facturaRepository.findById(id).map(factura -> {
             facturaDetails.setId(id);
+            resultadosConsultaService.consultarResultadoPorDocumentoId(id);
             return facturaRepository.save(facturaDetails);
         });
     }
@@ -70,6 +71,7 @@ public class FacturaService {
         if (facturaRepository.existsById(id)) {
             facturaRepository.deleteById(id);
             documentosCreadosRepository.deleteByDocumentoId(id);
+            resultadosConsultaService.deleteResultadosConsultaPorDocumentoId(id);
             return new MessageResponse("Factura deleted successfully");
         }
         return new MessageResponse("Error deleting Factura: Factura not found");
