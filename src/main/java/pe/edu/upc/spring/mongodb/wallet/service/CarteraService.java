@@ -11,6 +11,7 @@ import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
 import pe.edu.upc.spring.mongodb.wallet.repository.CarteraRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.ResultadosConsultaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,7 +47,7 @@ public class CarteraService {
         calcularTCEA(cartera);
 
         // Busca el documento en resultadosConsultaRepository
-        Optional<ResultadosConsulta> optionalDocumento = resultadosConsultaRepository.findById(documentoId);
+        Optional<ResultadosConsulta> optionalDocumento = resultadosConsultaRepository.findByDocumentoId(documentoId);
         if (optionalDocumento.isPresent()) {
             Double valorRecibir = optionalDocumento.get().getValorRecibir();
             cartera.CalcularValorTotalRecibir(valorRecibir);
@@ -77,6 +78,18 @@ public class CarteraService {
 
         // Calcula y establece la TCEA en la cartera
         cartera.setTcea(sumaMontos != 0 ? sumaTCEA / sumaMontos : 0);
+    }
+
+    public Cartera obtenerCartera(String carteraId) {
+        Optional<Cartera> cartera = carteraRepository.findById(carteraId);
+        if (cartera.isPresent()) {
+            return cartera.get();
+        } else {
+            throw new ResourceNotFoundException("Cartera con ID " + carteraId + " no encontrada.");
+        }
+    }
+    public List<Cartera> obtenerCarteras() {
+        return carteraRepository.findAll();
     }
 
 

@@ -37,8 +37,8 @@ public class ResultadosConsultaService {
     LocalDate fechaVencimiento ;
 
     private static final AtomicLong counter = new AtomicLong(1);
-    public ResultadosConsultaDTO consultarResultadoPorDocumentoId(String documentoId) {
-        ResultadosConsulta resultadosConsulta = new ResultadosConsulta();
+    public void consultarResultadoPorDocumentoId(String documentoId) {
+
         Optional<DocumentosCreados> documentoOpt = documentosCreadosRepository.findByDocumentoId(documentoId);
         if (documentoOpt.isEmpty()) {
             throw new RuntimeException("Documento no encontrado.");
@@ -47,6 +47,9 @@ public class ResultadosConsultaService {
             throw new IllegalArgumentException("The given id must not be null");
         }
 
+        ResultadosConsultaRepository.findByDocumentoId(documentoId)
+                .ifPresent(ResultadosConsultaRepository::delete);
+        ResultadosConsulta resultadosConsulta = new ResultadosConsulta();
         resultadosConsulta.setDocumentoId(documentoId);
         resultadosConsulta.setUserId(documentoOpt.get().getUserId());
         resultadosConsulta.setNumeroConsulta(String.valueOf(counter.getAndIncrement()));
@@ -116,9 +119,13 @@ public class ResultadosConsultaService {
         ResultadosConsultaRepository.save(resultadosConsulta);
 
 
+        resultadosConsulta.toResultadosConsultaDTO();
+    }
 
-
-
-        return resultadosConsulta.toResultadosConsultaDTO();
+        public List<ResultadosConsultaDTO> obtenerResultados() {
+            List<ResultadosConsulta> resultadosConsulta = ResultadosConsultaRepository.findAll();
+            return resultadosConsulta.stream()
+                    .map(ResultadosConsulta::toResultadosConsultaDTO)
+                    .collect(Collectors.toList());
         }
 }

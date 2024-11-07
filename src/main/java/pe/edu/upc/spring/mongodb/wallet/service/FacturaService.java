@@ -24,7 +24,8 @@ public class FacturaService {
 
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
-
+    @Autowired
+    private ResultadosConsultaService resultadosConsultaService;
     public List<FacturaDTO> getAllFacturas() {
         List<Factura> facturas = facturaRepository.findAll();
         return facturas.stream()
@@ -49,6 +50,7 @@ public class FacturaService {
                     LocalDate.now()
             );
             documentosCreadosRepository.save(documentoCreado);
+            resultadosConsultaService.consultarResultadoPorDocumentoId(savedFactura.getId());
             return new MessageResponse("Factura created successfully");
 
         } catch (Exception e) {

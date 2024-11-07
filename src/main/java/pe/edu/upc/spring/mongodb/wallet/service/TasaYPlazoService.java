@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
@@ -77,8 +78,8 @@ public class TasaYPlazoService {
     public boolean deleteTasaYPlazoByUserId() {
         String userId;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            userId = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDetailsImpl) {
+            userId = ((UserDetailsImpl) principal).getId();
         } else {
             userId = principal.toString();
         }

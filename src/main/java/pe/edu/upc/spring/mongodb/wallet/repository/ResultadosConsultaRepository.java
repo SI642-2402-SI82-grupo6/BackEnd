@@ -6,8 +6,9 @@ import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ResultadosConsultaRepository extends MongoRepository<ResultadosConsulta, String> {
     List<ResultadosConsulta> findByUserId(String userId);
-    List<ResultadosConsulta> findByDocumentoId(String documentoId);
+    Optional<ResultadosConsulta> findByDocumentoId(String documentoId);
    }

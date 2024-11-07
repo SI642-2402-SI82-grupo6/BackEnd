@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.object.IdGenerator;
@@ -33,8 +34,8 @@ public class TasaYPlazo {
     private Integer plazoEfectivo; // En meses o años
     public TasaYPlazo(TasaYPlazoDTORequest tasaYPlazoDTORequest){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            this.userId = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDetailsImpl) {
+            this.userId = ((UserDetailsImpl) principal).getId();
         } else {
             this.userId = principal.toString();
         }
@@ -55,8 +56,8 @@ public class TasaYPlazo {
 
     public TasaYPlazo(TasaYPlazoDTO tasaYPlazoDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            this.userId = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDetailsImpl) {
+            this.userId = ((UserDetailsImpl) principal).getId();
         } else {
             this.userId = principal.toString();
         }
