@@ -20,7 +20,8 @@ public class LetraService {
 
     @Autowired
     private LetraRepository letraRepository;
-
+    @Autowired
+    private ResultadosConsultaService resultadosConsultaService;
 
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
@@ -50,7 +51,7 @@ public class LetraService {
                     LocalDate.now()
             );
             documentosCreadosRepository.save(documentoCreado);
-
+            resultadosConsultaService.consultarResultadoPorDocumentoId(savedLetra.getId());
             return new MessageResponse("Letra created successfully");
         } catch (Exception e) {
             return new MessageResponse("Error creating Letra: " + e.getMessage());
