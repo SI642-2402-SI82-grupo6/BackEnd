@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.spring.mongodb.wallet.DTO.requestCartera.CarteraDtoRequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.resource.CarteraResource;
 import pe.edu.upc.spring.mongodb.wallet.model.Cartera;
+import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
 import pe.edu.upc.spring.mongodb.wallet.service.CarteraService;
 
 import java.util.List;
@@ -36,6 +37,12 @@ public class CarteraController {
     @GetMapping("/obtenerCarteras")
     public ResponseEntity<List<Cartera>> obtenerCarteras() {
         List<Cartera> carteraResource = carteraService.obtenerCarteras();
+        return ResponseEntity.ok(carteraResource);
+    }
+
+    @GetMapping("/obtenerResultadosConsultaPorCartera")
+    public ResponseEntity<List<ResultadosConsulta>> obtenerResultadosConsultaPorCartera(String carteraId) {
+        List<ResultadosConsulta> carteraResource = carteraService.obtenerResultadosConsultaPorCarteraId(carteraId);
         return ResponseEntity.ok(carteraResource);
     }
 

@@ -12,6 +12,7 @@ import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
 import pe.edu.upc.spring.mongodb.wallet.repository.CarteraRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.ResultadosConsultaRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,8 @@ public class CarteraService {
     private CarteraRepository carteraRepository;
     @Autowired
     private ResultadosConsultaRepository resultadosConsultaRepository;
+    @Autowired
+    private ResultadosConsultaService resultadosConsultaService;
     public CarteraResource createCartera(CarteraDtoRequest carteraDtoRequest){
         Cartera cartera = new Cartera();
         cartera.setName(carteraDtoRequest.getName());
@@ -101,6 +104,25 @@ public class CarteraService {
         return carteraRepository.findAll();
     }
 
+
+    public List<ResultadosConsulta> obtenerResultadosConsultaPorCarteraId(String carteraId) {
+        Optional<Cartera> cartera = carteraRepository.findById(carteraId);
+        if (cartera.isPresent()) {
+            Cartera carteraObj = cartera.get();
+            List<String> documentosCreadosIds = carteraObj.getDocumentosCreadosIds();
+            List<ResultadosConsulta> resultadosConsultas = new ArrayList<>();
+            for (String documentoId : documentosCreadosIds) {
+                Optional<ResultadosConsulta> resultadosConsulta = resultadosConsultaRepository.findByDocumentoId(documentoId);
+                resultadosConsulta.ifPresent(resultadosConsultas::add);
+            }
+            if (resultadosConsultas.isEmpty()) {
+                throw new ResourceNotFoundException("No results found for Cartera with ID " + carteraId);
+            }
+            return resultadosConsultas;
+        } else {
+            throw new ResourceNotFoundException("Cartera with ID " + carteraId + " not found.");
+        }
+    }
 
 
 
