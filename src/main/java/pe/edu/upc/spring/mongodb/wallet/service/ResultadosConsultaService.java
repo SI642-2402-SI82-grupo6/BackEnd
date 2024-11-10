@@ -94,8 +94,7 @@ public class ResultadosConsultaService {
                 }
             }
         }
-        // Fetch TasaYPlazo and apply calculations
-        Optional<TasaYPlazo> tasaYPlazoOpt = tasaYPlazoRepository.findByUserId(resultadosConsulta.getUserId());
+        Optional<TasaYPlazo> tasaYPlazoOpt = tasaYPlazoRepository.findByDocumentoId(documentoId);
         logger.info("Fetched TasaYPlazo: {}", tasaYPlazoOpt);
         if (tasaYPlazoOpt.isPresent()) {
             TasaYPlazo tasaYPlazo = tasaYPlazoOpt.get();

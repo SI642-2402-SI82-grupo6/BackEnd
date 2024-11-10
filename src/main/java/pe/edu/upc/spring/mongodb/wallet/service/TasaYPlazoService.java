@@ -10,6 +10,7 @@ import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
+import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.TasaYPlazoRepository;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class TasaYPlazoService {
 
     @Autowired
     private TasaYPlazoRepository tasaYPlazoRepository;
+    @Autowired
+    private DocumentosCreadosRepository documentosCreadosRepository;
 
     public List<TasaYPlazo> getAllTasaYPlazo() {
         return tasaYPlazoRepository.findAll();
@@ -38,15 +41,11 @@ public class TasaYPlazoService {
     public MessageResponse createTasaYPlazo(TasaYPlazoDTORequest tasaYPlazoDTO) {
 
         try {
-            // Create a new TasaYPlazo
-            TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
 
-            // Check if a TasaYPlazo with the same userId already exists
-            Optional<TasaYPlazo> existingTasaYPlazo = tasaYPlazoRepository.findByUserId(tasaYPlazo.getUserId());
-            if (existingTasaYPlazo.isPresent()) {
-                tasaYPlazoRepository.deleteByUserId(tasaYPlazo.getUserId());
-            }
-            // Save the new TasaYPlazo
+            TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
+            documentosCreadosRepository.findLastCreated().ifPresent(documentosCreados -> {
+                tasaYPlazo.setDocumentoId(documentosCreados.getDocumentoId());
+            });
             tasaYPlazoRepository.save(tasaYPlazo);
 
             return new MessageResponse("TasaYPlazo created successfully");

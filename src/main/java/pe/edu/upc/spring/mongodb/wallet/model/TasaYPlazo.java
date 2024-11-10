@@ -21,6 +21,7 @@ public class TasaYPlazo {
     @Id
     private String id;
     private String userId;
+    private String documentoId;
     private TipoTasa tipoTasa; // Tipo de tasa: efectiva o nominal
 
     // Para Tasa Nominal

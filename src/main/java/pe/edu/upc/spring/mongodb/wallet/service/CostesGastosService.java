@@ -26,8 +26,6 @@ public class CostesGastosService {
         return costesGastosRepository.findAll();
     }
 
-
-
     public MessageResponse createCostesGastos(CostesGastosDTORequest costesGastos) {
         try {
             Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();

@@ -16,6 +16,8 @@ public interface TasaYPlazoRepository extends MongoRepository<TasaYPlazo,String>
 
     Optional<TasaYPlazo> findByUserId(String userId);
 
+    Optional<TasaYPlazo> findByDocumentoId(String documentoId);
+
 
 
     void deleteByUserId(String userId);
