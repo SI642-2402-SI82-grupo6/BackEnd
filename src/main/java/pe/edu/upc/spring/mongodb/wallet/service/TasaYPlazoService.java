@@ -9,6 +9,7 @@ import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
+import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
 import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.TasaYPlazoRepository;
@@ -46,11 +47,14 @@ public class TasaYPlazoService {
             documentosCreadosRepository.findLastCreated().ifPresent(documentosCreados -> {
                 tasaYPlazo.setDocumentoId(documentosCreados.getDocumentoId());
             });
+            if(tasaYPlazoRepository.findByDocumentoId(tasaYPlazo.getDocumentoId()).isPresent()){
+                throw new ResourceAlreadyExistsException("TasaYPlazo already exists");
+            }
             tasaYPlazoRepository.save(tasaYPlazo);
 
             return new MessageResponse("TasaYPlazo created successfully");
         } catch (ResourceAlreadyExistsException e) {
-            return new MessageResponse("Error creating TasaYPlazo: " + e.getMessage());
+            throw new ResourceNotFoundException("Error creating TasaYPlazo: " + e.getMessage());
         }
 
     }
@@ -69,7 +73,7 @@ public class TasaYPlazoService {
             tasaYPlazoRepository.deleteById(id);
             return new MessageResponse("TasaYPlazo deleted successfully");
         }
-        return new MessageResponse("Error deleting TasaYPlazo: TasaYPlazo not found");
+        throw new ResourceNotFoundException("Error deleting TasaYPlazo: TasaYPlazo not found");
     }
     public List<TasaYPlazo> getAllTasasYPlazos() {
         return tasaYPlazoRepository.findAll();

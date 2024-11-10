@@ -12,4 +12,5 @@ public interface ResultadosConsultaRepository extends MongoRepository<Resultados
     List<ResultadosConsulta> findByUserId(String userId);
     Optional<ResultadosConsulta> findByDocumentoId(String documentoId);
     void deleteByDocumentoId(String documentoId);
+
    }

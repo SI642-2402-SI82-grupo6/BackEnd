@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
+import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.*;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoGasto;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
@@ -77,7 +78,7 @@ public class ResultadosConsultaService {
                 resultadosConsulta.setRetencion(letra.getRetencion());
                 fechaVencimiento = letra.getFechaVencimiento();
             } else {
-                throw new RuntimeException("Factura o Letra no encontrada.");
+                throw new ResourceNotFoundException("Factura o Letra no encontrada.");
             }
         }
         List<CostesGastos> costesGastosList = costesGastosRepository.findAll();
@@ -115,9 +116,10 @@ public class ResultadosConsultaService {
         resultadosConsulta.CalcularValorEntregado();
         resultadosConsulta.CalcularTceaPorcentaje();
 
+        if(ResultadosConsultaRepository.findByDocumentoId(documentoId).isPresent()){
+            ResultadosConsultaRepository.deleteByDocumentoId(documentoId);
+        }
         ResultadosConsultaRepository.save(resultadosConsulta);
-
-
         resultadosConsulta.toResultadosConsultaDTO();
     }
     public void deleteResultadosConsultaPorDocumentoId(String id) {

@@ -1,6 +1,10 @@
 package pe.edu.upc.spring.mongodb.wallet.controller;
 
+
+
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
@@ -18,16 +22,12 @@ public class LetraController {
     @Autowired
     private LetraService letraService;
 
+
     @PostMapping
-    public ResponseEntity<?> crearLetra(@RequestBody LetraDTORequest letraDTO) {
-        try {
-            MessageResponse response = letraService.createLetra(letraDTO);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Datos de la letra incorrectos."));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(new MessageResponse("Error interno del servidor."));
-        }
+
+    public ResponseEntity<MessageResponse> crearLetra(@RequestBody LetraDTORequest letraDTO) {
+        MessageResponse response = letraService.createLetra(letraDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping

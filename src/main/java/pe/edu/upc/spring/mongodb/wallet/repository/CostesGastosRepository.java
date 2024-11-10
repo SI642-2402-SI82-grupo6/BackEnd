@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface CostesGastosRepository extends MongoRepository<CostesGastos, String> {
     Optional<CostesGastos> findByDocumentoId(String documentoId);
+    void deleteByDocumentoId(String documentoId);
 
 }

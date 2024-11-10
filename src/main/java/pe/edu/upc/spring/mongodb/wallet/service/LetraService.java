@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.LetraDTO;
+import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.Letra;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
@@ -54,7 +55,7 @@ public class LetraService {
             resultadosConsultaService.consultarResultadoPorDocumentoId(savedLetra.getId());
             return new MessageResponse("Letra created successfully");
         } catch (Exception e) {
-            return new MessageResponse("Error creating Letra: " + e.getMessage());
+            throw new ResourceNotFoundException("Error creating Letra: " + e.getMessage());
         }
     }
     public Optional<Letra> updateLetra(String id, Letra letraDetails) {
@@ -73,6 +74,6 @@ public class LetraService {
             resultadosConsultaService.deleteResultadosConsultaPorDocumentoId(id);
             return new MessageResponse("Letra deleted successfully");
         }
-        return new MessageResponse("Error deleting Letra: Letra not found");
+        throw new ResourceNotFoundException("Error deleting Letra: Letra not found");
     }
 }

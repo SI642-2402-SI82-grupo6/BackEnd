@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.wallet.DTO.requestCartera.CarteraDtoRequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.resource.CarteraResource;
 
+import pe.edu.upc.spring.mongodb.wallet.exception.DuplicateDocumentIdException;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.Cartera;
 import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
@@ -24,13 +25,21 @@ public class CarteraService {
         Cartera cartera = new Cartera();
         cartera.setName(carteraDtoRequest.getName());
         cartera.setTypeMoney(carteraDtoRequest.getTypeMoney());
-        carteraRepository.save(cartera);
+        List<Cartera> existingCarteras = carteraRepository.findAll();
+        for (Cartera existingCartera : existingCarteras) {
+            for (String documentoId : cartera.getDocumentosCreadosIds()) {
+                if (existingCartera.getDocumentosCreadosIds().contains(documentoId)) {
+                    throw new DuplicateDocumentIdException("Duplicate document ID found: " + documentoId);
+                }
+            }
+        }
         CarteraResource carteraResource = new CarteraResource();
         carteraResource.setName(cartera.getName());
         carteraResource.setTypeMoney(cartera.getTypeMoney());
         carteraResource.setCreationDate(cartera.getCreationDate());
         carteraResource.setValorTotalRecibir(cartera.getValorTotalRecibir());
         carteraResource.setTcea(cartera.getTcea());
+        carteraRepository.save(cartera);
         return carteraResource;
     }
     public CarteraResource agregarDocumento(String carteraId, String documentoId) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.FacturaDTO;
+import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.Factura;
 import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.object.TipoDocumento;
@@ -54,7 +55,7 @@ public class FacturaService {
             return new MessageResponse("Factura created successfully");
 
         } catch (Exception e) {
-            return new MessageResponse("Error creating Factura: " + e.getMessage());
+            throw new ResourceNotFoundException("Error creating Factura: " + e.getMessage());
         }
 
     }
@@ -74,6 +75,6 @@ public class FacturaService {
             resultadosConsultaService.deleteResultadosConsultaPorDocumentoId(id);
             return new MessageResponse("Factura deleted successfully");
         }
-        return new MessageResponse("Error deleting Factura: Factura not found");
+        throw new ResourceNotFoundException("Error deleting Factura: Factura not found");
     }
 }
