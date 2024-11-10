@@ -21,6 +21,7 @@ public class ResultadosConsulta {
     private String id; // ID del resultado de la consulta
     private String userId; // ID del usuario propietario
     private String documentoId; // ID del documento asociado (factura o letra)
+    private String type; // Tipo de documento
 
     private String numeroConsulta; // Nº de consulta
     private LocalDate fechaGiro; // Fecha Giro
@@ -128,6 +129,7 @@ public class ResultadosConsulta {
         ResultadosConsultaDTO resultadosConsultaDTO = new ResultadosConsultaDTO();
         resultadosConsultaDTO.setDocumentoId(this.documentoId);
         resultadosConsultaDTO.setId(this.id);
+        resultadosConsultaDTO.setType(this.type);
         resultadosConsultaDTO.setNumeroConsulta(this.numeroConsulta);
         resultadosConsultaDTO.setFechaGiro(this.fechaGiro);
         resultadosConsultaDTO.setValorNomAplicando(this.valorNomAplicando);

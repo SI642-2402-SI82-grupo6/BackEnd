@@ -67,6 +67,7 @@ public class ResultadosConsultaService {
             resultadosConsulta.setValorNomAplicando(factura.getTotalFacturado());
             resultadosConsulta.setFechaVencimiento(factura.getFechaPago());
             resultadosConsulta.setRetencion(factura.getRetencion());
+            resultadosConsulta.setType("FACTURA");
             fechaVencimiento = factura.getFechaPago();
         } else {
             Optional<Letra> letraOpt = letraRepository.findById(documentoId);
@@ -76,6 +77,7 @@ public class ResultadosConsultaService {
                 resultadosConsulta.setValorNomAplicando(letra.getValorNominal());
                 resultadosConsulta.setFechaVencimiento(letra.getFechaVencimiento());
                 resultadosConsulta.setRetencion(letra.getRetencion());
+                resultadosConsulta.setType("LETRA");
                 fechaVencimiento = letra.getFechaVencimiento();
             } else {
                 throw new ResourceNotFoundException("Factura o Letra no encontrada.");

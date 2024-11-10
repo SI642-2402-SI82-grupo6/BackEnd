@@ -9,6 +9,7 @@ public class ResultadosConsultaDTO {
     private String id; // ID
     private String documentoId; // ID del documento asociado (factura o letra)
     private String numeroConsulta; // Nº de consulta
+    private String type; // Tipo de documento
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaGiro; // Fecha Giro
     private Double valorNomAplicando; // Val. Nom. aplicando
