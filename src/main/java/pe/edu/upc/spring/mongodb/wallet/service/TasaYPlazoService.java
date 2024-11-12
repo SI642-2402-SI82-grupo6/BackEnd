@@ -47,9 +47,7 @@ public class TasaYPlazoService {
             documentosCreadosRepository.findLastCreated().ifPresent(documentosCreados -> {
                 tasaYPlazo.setDocumentoId(documentosCreados.getDocumentoId());
             });
-            if(tasaYPlazoRepository.findByDocumentoId(tasaYPlazo.getDocumentoId()).isPresent()){
-                throw new ResourceAlreadyExistsException("TasaYPlazo already exists");
-            }
+
             tasaYPlazoRepository.save(tasaYPlazo);
 
             return new MessageResponse("TasaYPlazo created successfully");
