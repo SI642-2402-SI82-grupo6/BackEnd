@@ -43,8 +43,8 @@ public class CostesGastos {
     }
     public CostesGastos(CostesGastosDTORequest costesGastos) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            this.userId = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDetailsImpl) {
+            this.userId = ((UserDetailsImpl) principal).getId();
         } else {
             this.userId = principal.toString();
         }
