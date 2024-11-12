@@ -52,7 +52,6 @@ public class LetraService {
                     LocalDate.now()
             );
             documentosCreadosRepository.save(documentoCreado);
-            resultadosConsultaService.consultarResultadoPorDocumentoId(savedLetra.getId());
             return new MessageResponse("Letra created successfully");
         } catch (Exception e) {
             throw new ResourceNotFoundException("Error creating Letra: " + e.getMessage());

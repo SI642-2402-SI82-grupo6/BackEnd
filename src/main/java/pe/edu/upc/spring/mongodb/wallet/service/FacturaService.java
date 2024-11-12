@@ -51,7 +51,7 @@ public class FacturaService {
                     LocalDate.now()
             );
             documentosCreadosRepository.save(documentoCreado);
-            resultadosConsultaService.consultarResultadoPorDocumentoId(savedFactura.getId());
+
             return new MessageResponse("Factura created successfully");
 
         } catch (Exception e) {

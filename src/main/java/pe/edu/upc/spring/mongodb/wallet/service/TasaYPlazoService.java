@@ -25,6 +25,8 @@ public class TasaYPlazoService {
     private TasaYPlazoRepository tasaYPlazoRepository;
     @Autowired
     private DocumentosCreadosRepository documentosCreadosRepository;
+    @Autowired
+    private ResultadosConsultaService resultadosConsultaService;
 
     public List<TasaYPlazo> getAllTasaYPlazo() {
         return tasaYPlazoRepository.findAll();
@@ -63,6 +65,7 @@ public class TasaYPlazoService {
         return tasaYPlazoRepository.findById(id).map(tasaYPlazo -> {
             tasaYPlazoDetails.setId(id);
             tasaYPlazoRepository.save(tasaYPlazoDetails);
+            resultadosConsultaService.consultarResultadoPorDocumentoId(tasaYPlazoDetails.getDocumentoId());
             return tasaYPlazoRepository.save(tasaYPlazoDetails);
         });
     }
