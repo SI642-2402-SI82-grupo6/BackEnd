@@ -45,5 +45,10 @@ public class CarteraController {
         List<ResultadosConsulta> carteraResource = carteraService.obtenerResultadosConsultaPorCarteraId(carteraId);
         return ResponseEntity.ok(carteraResource);
     }
+    @DeleteMapping("/eliminarCartera")
+    public ResponseEntity<String> eliminarCartera(String carteraId) {
+        carteraService.deleteCartera(carteraId);
+        return ResponseEntity.ok("Cartera eliminada correctamente");
+    }
 
 }

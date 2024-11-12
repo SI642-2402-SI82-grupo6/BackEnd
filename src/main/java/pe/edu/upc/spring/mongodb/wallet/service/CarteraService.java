@@ -125,6 +125,15 @@ public class CarteraService {
         }
     }
 
+    public void deleteCartera(String carteraId) {
+        Optional<Cartera> cartera = carteraRepository.findById(carteraId);
+        if (cartera.isPresent()) {
+            carteraRepository.deleteById(carteraId);
+        } else {
+            throw new ResourceNotFoundException("Cartera with ID " + carteraId + " not found.");
+        }
+    }
+
 
 
 
