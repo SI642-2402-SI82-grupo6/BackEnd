@@ -22,7 +22,8 @@ public interface DocumentosCreadosRepository extends MongoRepository<DocumentosC
 
 
     Optional<List<DocumentosCreados>> findAllByUserId(String userId);
-
+    @Query(value = "{}", fields = "{ 'documentoId': 1 }", sort = "{ '_id': -1 }")
+    Optional<String> findLastCreateds();
 
     Optional<DocumentosCreados> findByDocumentoId(String documentoId);
     void deleteByDocumentoId(String documentoId);

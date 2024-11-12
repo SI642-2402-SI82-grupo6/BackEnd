@@ -44,9 +44,8 @@ public class TasaYPlazoService {
         try {
 
             TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
-            documentosCreadosRepository.findLastCreated().ifPresent(documentosCreados -> {
-                tasaYPlazo.setDocumentoId(documentosCreados.getDocumentoId());
-            });
+            String documentId =documentosCreadosRepository.findLastCreateds().get();
+            tasaYPlazo.setDocumentoId(documentId);
             if(tasaYPlazoRepository.findByDocumentoId(tasaYPlazo.getDocumentoId()).isPresent()){
                 throw new ResourceAlreadyExistsException("TasaYPlazo already exists");
             }
