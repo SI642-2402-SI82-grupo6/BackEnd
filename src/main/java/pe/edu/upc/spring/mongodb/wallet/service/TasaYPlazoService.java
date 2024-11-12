@@ -53,7 +53,7 @@ public class TasaYPlazoService {
                 throw new ResourceAlreadyExistsException("TasaYPlazo already exists");
             }
             tasaYPlazoRepository.save(tasaYPlazo);
-
+            resultadosConsultaService.consultarResultadoPorDocumentoId(tasaYPlazo.getDocumentoId());
             return new MessageResponse("TasaYPlazo created successfully");
         } catch (ResourceAlreadyExistsException e) {
             throw new ResourceNotFoundException("Error creating TasaYPlazo: " + e.getMessage());
