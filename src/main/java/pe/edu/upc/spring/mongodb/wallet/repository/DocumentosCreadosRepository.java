@@ -21,6 +21,9 @@ public interface DocumentosCreadosRepository extends MongoRepository<DocumentosC
     }
 
 
+    Optional<List<DocumentosCreados>> findAllByUserId(String userId);
+
+
     Optional<DocumentosCreados> findByDocumentoId(String documentoId);
     void deleteByDocumentoId(String documentoId);
 }

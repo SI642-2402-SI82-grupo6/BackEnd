@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.RequestConsultaResultado;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
+import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.service.ResultadosConsultaService;
 
 import java.time.LocalDate;
@@ -23,4 +24,9 @@ public class ResultadosConsultaController {
         return ResponseEntity.ok(resultadosConsultaDTO);
     }
 
+    @GetMapping("/obtenerDocumentosCreados")
+    public ResponseEntity<List<DocumentosCreados>> obtenerDocumentosCreados() {
+        List<DocumentosCreados> resultadosConsultaDTO = resultadosConsultaService.obtenerDocumentosCreados();
+        return ResponseEntity.ok(resultadosConsultaDTO);
+    }
 }

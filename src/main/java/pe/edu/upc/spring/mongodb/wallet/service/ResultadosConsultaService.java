@@ -3,7 +3,9 @@ package pe.edu.upc.spring.mongodb.wallet.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.ResultadosConsultaDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.*;
@@ -12,6 +14,7 @@ import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 import pe.edu.upc.spring.mongodb.wallet.repository.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -134,4 +137,20 @@ public class ResultadosConsultaService {
                     .map(ResultadosConsulta::toResultadosConsultaDTO)
                     .collect(Collectors.toList());
         }
+
+    public List<DocumentosCreados> obtenerDocumentosCreados() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId;
+        if (principal instanceof UserDetailsImpl) {
+            userId = ((UserDetailsImpl) principal).getId();
+        } else {
+            userId = principal.toString();
+        }
+        Optional<List<DocumentosCreados>> AllDocument=documentosCreadosRepository.findAllByUserId(userId);
+        if(AllDocument.isEmpty()){
+            throw new ResourceNotFoundException("No se encontraron documentos creados");
+        }
+        return AllDocument.get();
+    }
+
 }

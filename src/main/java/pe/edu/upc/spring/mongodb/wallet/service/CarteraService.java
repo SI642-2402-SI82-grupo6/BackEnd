@@ -8,6 +8,7 @@ import pe.edu.upc.spring.mongodb.wallet.DTO.resource.CarteraResource;
 import pe.edu.upc.spring.mongodb.wallet.exception.DuplicateDocumentIdException;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
 import pe.edu.upc.spring.mongodb.wallet.model.Cartera;
+import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.model.ResultadosConsulta;
 import pe.edu.upc.spring.mongodb.wallet.repository.CarteraRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.ResultadosConsultaRepository;
@@ -123,6 +124,7 @@ public class CarteraService {
             throw new ResourceNotFoundException("Cartera with ID " + carteraId + " not found.");
         }
     }
+
 
 
 
