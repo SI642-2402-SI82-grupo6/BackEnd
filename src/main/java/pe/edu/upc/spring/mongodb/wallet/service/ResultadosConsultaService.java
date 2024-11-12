@@ -105,14 +105,21 @@ public class ResultadosConsultaService {
         if (tasaYPlazoOpt.isPresent()) {
             TasaYPlazo tasaYPlazo = tasaYPlazoOpt.get();
             logger.info("Fecha de vencimiento (Factura): {}", fechaVencimiento);
-            resultadosConsulta.CalcularDias(tasaYPlazo.getFechaDescuento(), fechaVencimiento);
-            if (tasaYPlazo.getTipoTasa() .equals (TipoTasa.EFECTIVA)) {
+            resultadosConsulta.CalcularDias(fechaVencimiento, tasaYPlazo.getFechaDescuento());
 
-                resultadosConsulta.CalcularTEdiasTasaEfectiva(tasaYPlazo.getTasaEfectiva(), tasaYPlazo.getPlazoEfectivo());
-            } else if (tasaYPlazo.getTipoTasa() == TipoTasa.NOMINAL) {
-                resultadosConsulta.CalcularTEDiasTasaNominal(tasaYPlazo.getTasaNominal(), tasaYPlazo.getPlazoDeTasa(), tasaYPlazo.getPeriodoCapital());
+            if (tasaYPlazo.getTipoTasa() != null) {
+                if (tasaYPlazo.getTipoTasa().equals(TipoTasa.EFECTIVA)) {
+                    resultadosConsulta.CalcularTEdiasTasaEfectiva(tasaYPlazo.getTasaEfectiva(), tasaYPlazo.getPlazoEfectivo());
+                } else if (tasaYPlazo.getTipoTasa().equals(TipoTasa.NOMINAL)) {
+                    resultadosConsulta.CalcularTEDiasTasaNominal(tasaYPlazo.getTasaNominal(), tasaYPlazo.getPlazoDeTasa(), tasaYPlazo.getPeriodoCapital());
+                } else {
+                    logger.warn("Tipo de tasa desconocido: {}", tasaYPlazo.getTipoTasa());
+                }
+            } else {
+                logger.error("El tipo de tasa es nulo");
             }
         }
+
         // Llamar a los métodos adicionales
         resultadosConsulta.CalcularDescuento();
         resultadosConsulta.CalcularValorDescuento();
