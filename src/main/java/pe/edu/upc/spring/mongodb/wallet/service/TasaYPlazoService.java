@@ -10,6 +10,7 @@ import pe.edu.upc.spring.mongodb.wallet.DTO.request.TasaYPlazoDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.TasaYPlazoDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceAlreadyExistsException;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
+import pe.edu.upc.spring.mongodb.wallet.model.DocumentosCreados;
 import pe.edu.upc.spring.mongodb.wallet.model.TasaYPlazo;
 import pe.edu.upc.spring.mongodb.wallet.repository.DocumentosCreadosRepository;
 import pe.edu.upc.spring.mongodb.wallet.repository.TasaYPlazoRepository;
@@ -44,7 +45,7 @@ public class TasaYPlazoService {
         try {
 
             TasaYPlazo tasaYPlazo = new TasaYPlazo(tasaYPlazoDTO);
-            String documentId =documentosCreadosRepository.findLastCreateds().get();
+            String documentId =getLastCreatedDocumentoId();
             tasaYPlazo.setDocumentoId(documentId);
             if(tasaYPlazoRepository.findByDocumentoId(tasaYPlazo.getDocumentoId()).isPresent()){
                 throw new ResourceAlreadyExistsException("TasaYPlazo already exists");
@@ -91,6 +92,11 @@ public class TasaYPlazoService {
             return true;
         }
         return false;
+    }
+    public String getLastCreatedDocumentoId() {
+        return documentosCreadosRepository.findLastCreateds()
+                .map(DocumentosCreados::getDocumentoId) // Extrae el campo documentoId
+                .orElse(null);
     }
 
 }
