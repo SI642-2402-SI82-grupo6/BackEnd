@@ -29,11 +29,8 @@ public class CostesGastosService {
     }
 
     public MessageResponse createCostesGastos(CostesGastosDTORequest costesGastos) {
-        Optional<DocumentosCreados> lastCreatedDoc = documentosCreadosRepository.findLastCreated();
-        if (lastCreatedDoc.isEmpty()) {
-            throw new ResourceNotFoundException("No documents found");
-        }
-        String documentoId = lastCreatedDoc.get().getDocumentoId();
+
+        String documentoId = getLastCreatedDocumentoId();
         CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
         costesGastosEntity.setDocumentoId(documentoId);
 
@@ -68,5 +65,10 @@ public class CostesGastosService {
     public MessageResponse deleteAllCostesGastos() {
         costesGastosRepository.deleteAll();
         return new MessageResponse("All CostesGastos deleted successfully");
+    }
+    public String getLastCreatedDocumentoId() {
+        return documentosCreadosRepository.findLastCreateds()
+                .map(DocumentosCreados::getDocumentoId) // Extrae el campo documentoId
+                .orElse(null);
     }
 }
