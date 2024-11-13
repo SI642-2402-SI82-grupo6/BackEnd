@@ -34,9 +34,7 @@ public class CostesGastosService {
         CostesGastos costesGastosEntity = new CostesGastos(costesGastos);
         costesGastosEntity.setDocumentoId(documentoId);
 
-        if (costesGastosRepository.findByDocumentoId(documentoId).isPresent()) {
-            costesGastosRepository.deleteByDocumentoId(documentoId);
-        }
+
         costesGastosRepository.save(costesGastosEntity);
         return new MessageResponse("CostesGastos created successfully");
     }
