@@ -54,6 +54,10 @@ public class CarteraService {
         }
 
         Cartera cartera = optionalCartera.get();
+        if (cartera.getDocumentosCreadosIds().contains(documentoId)) {
+            throw new DuplicateDocumentIdException("El documento con ID " + documentoId + " ya está en la cartera.");
+        }
+
         cartera.getDocumentosCreadosIds().add(documentoId);
 
         // Calcula la TCEA de la cartera actualizada
