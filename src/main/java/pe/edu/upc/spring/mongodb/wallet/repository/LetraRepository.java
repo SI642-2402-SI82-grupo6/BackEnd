@@ -9,5 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LetraRepository extends MongoRepository<Letra, String> {
+    List<Letra> findByUserId(String userId);
+
 
 }

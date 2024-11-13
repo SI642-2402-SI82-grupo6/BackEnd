@@ -1,8 +1,10 @@
 package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.FacturaDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.FacturaDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
@@ -28,7 +30,14 @@ public class FacturaService {
     @Autowired
     private ResultadosConsultaService resultadosConsultaService;
     public List<FacturaDTO> getAllFacturas() {
-        List<Factura> facturas = facturaRepository.findAll();
+        String userId;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            userId = ((UserDetailsImpl) principal).getId();
+        } else {
+            userId = principal.toString();
+        }
+        List<Factura> facturas = facturaRepository.findByUserId(userId);
         return facturas.stream()
                 .map(Factura::toDTO)
                 .collect(Collectors.toList());

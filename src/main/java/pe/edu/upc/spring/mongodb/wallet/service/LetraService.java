@@ -1,8 +1,10 @@
 package pe.edu.upc.spring.mongodb.wallet.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.spring.mongodb.security.payload.response.MessageResponse;
+import pe.edu.upc.spring.mongodb.security.security.services.UserDetailsImpl;
 import pe.edu.upc.spring.mongodb.wallet.DTO.request.LetraDTORequest;
 import pe.edu.upc.spring.mongodb.wallet.DTO.response.LetraDTO;
 import pe.edu.upc.spring.mongodb.wallet.exception.ResourceNotFoundException;
@@ -28,7 +30,14 @@ public class LetraService {
     private DocumentosCreadosRepository documentosCreadosRepository;
 
     public List<LetraDTO> getAllLetras() {
-        List<Letra> letras= letraRepository.findAll();
+        String userId;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            userId = ((UserDetailsImpl) principal).getId();
+        } else {
+            userId = principal.toString();
+        }
+        List<Letra> letras= letraRepository.findByUserId(userId);
         return letras.stream()
                 .map(Letra::toDTO)
                 .collect(java.util.stream.Collectors.toList());

@@ -9,5 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FacturaRepository extends MongoRepository<Factura, String> {
+    List<Factura> findByUserId(String userId);
 
 }
