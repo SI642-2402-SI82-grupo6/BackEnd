@@ -112,7 +112,13 @@ public class ResultadosConsulta {
     public void CalcularTceaPorcentaje() {
         if (dias > 0 && this.valorRecibir != 0) {
             if (this.valorRecibir < 0) {
-                this.tceaPorcentaje = Math.pow(this.valorEntregado / -this.valorRecibir, (double) 365 / this.dias) - 1;
+                if(this.valorEntregado < 0) {
+                    this.tceaPorcentaje = Math.pow(-this.valorEntregado / -this.valorRecibir, (double) 365 / this.dias) - 1;
+                }
+                else{
+                    this.tceaPorcentaje = Math.pow(this.valorEntregado / -this.valorRecibir, (double) 365 / this.dias) - 1;
+                }
+
             } else {
                 this.tceaPorcentaje = Math.pow(this.valorEntregado / this.valorRecibir, (double) 365 / this.dias) - 1;
             }
