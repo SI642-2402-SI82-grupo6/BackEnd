@@ -87,11 +87,11 @@ public class ResultadosConsulta {
 
     public void CalcularTEDiasTasaNominal(double tasaNominal, int plazoDeTasa, int periodoCapital) {
         double m = (double) plazoDeTasa / periodoCapital;
-        double n =(double) dias/periodoCapital;
+        double n =(double) this.dias/periodoCapital;
         this.tasaEfectiva = Math.pow(1 + tasaNominal/m, n) - 1;
     }
     public void CalcularTEdiasTasaEfectiva(Double tasaEfectiva,Integer plazoEfectivo){
-        this.tasaEfectiva = Math.pow(1 + tasaEfectiva, (double) dias/plazoEfectivo) - 1;
+        this.tasaEfectiva = Math.pow(1 + tasaEfectiva, (double) this.dias/plazoEfectivo) - 1;
     }
     public void CalcularDescuento(){
         this.descuento = this.tasaEfectiva/(1+this.tasaEfectiva);
@@ -109,8 +109,16 @@ public class ResultadosConsulta {
         this.valorEntregado = this.valorRecibir+this.costeInicial+this.costeFinal+this.valorDescuento;
     }
 
-    public void CalcularTceaPorcentaje(){
-        this.tceaPorcentaje = Math.pow(this.valorEntregado/this.valorRecibir, (double)365/dias) - 1;
+    public void CalcularTceaPorcentaje() {
+        if (dias > 0 && this.valorRecibir != 0) {
+            if (this.valorRecibir < 0) {
+                this.tceaPorcentaje = Math.pow(this.valorEntregado / -this.valorRecibir, (double) 365 / this.dias) - 1;
+            } else {
+                this.tceaPorcentaje = Math.pow(this.valorEntregado / this.valorRecibir, (double) 365 / this.dias) - 1;
+            }
+        } else {
+            this.tceaPorcentaje = 0.0;
+        }
     }
 
 
