@@ -63,7 +63,7 @@ public class CarteraService {
         cartera.getDocumentosCreadosIds().add(documentoId);
 
         // Calcula la TCEA de la cartera actualizada
-        calcularTCEA(cartera);
+
 
         // Busca el documento en resultadosConsultaRepository
         Optional<ResultadosConsulta> optionalDocumento = resultadosConsultaRepository.findByDocumentoId(documentoId);
@@ -73,7 +73,7 @@ public class CarteraService {
         } else {
             throw new ResourceNotFoundException("Documento con ID " + documentoId + " no encontrado.");
         }
-
+        calcularTCEA(cartera);
         // Guarda la cartera actualizada en el repositorio
         Cartera response = carteraRepository.save(cartera);
 
@@ -87,7 +87,7 @@ public class CarteraService {
 
         for (String documentoId : cartera.getDocumentosCreadosIds()) {
             // Buscar el documento en el repositorio
-            Optional<ResultadosConsulta> optionalDocumento = resultadosConsultaRepository.findById(documentoId);
+            Optional<ResultadosConsulta> optionalDocumento = resultadosConsultaRepository.findByDocumentoId(documentoId);
             if (optionalDocumento.isPresent()) {
                 ResultadosConsulta documento = optionalDocumento.get();
                 sumaTCEA += documento.getTceaPorcentaje() * documento.getValorRecibir();

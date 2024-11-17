@@ -14,7 +14,6 @@ import pe.edu.upc.spring.mongodb.wallet.object.TipoTasa;
 import pe.edu.upc.spring.mongodb.wallet.repository.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;

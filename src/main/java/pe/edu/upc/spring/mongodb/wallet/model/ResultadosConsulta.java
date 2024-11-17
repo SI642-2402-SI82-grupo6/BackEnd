@@ -103,10 +103,10 @@ public class ResultadosConsulta {
         this.valorNeto= this.valorNomAplicando*(1-descuento);
     }
     public void CalcularValorRecibir(){
-        this.valorRecibir = this.valorNeto - this.retencion;
+        this.valorRecibir = this.valorNeto - this.retencion-this.costeInicial-this.costeFinal;
     }
     public void CalcularValorEntregado(){
-        this.valorEntregado = this.valorRecibir+this.costeInicial+this.costeFinal+this.valorDescuento;
+        this.valorEntregado = this.valorRecibir+this.valorDescuento;
     }
 
     public void CalcularTceaPorcentaje() {
