@@ -158,5 +158,13 @@ public class ResultadosConsultaService {
         }
         return AllDocument.get();
     }
+    public DocumentosCreados obtenerDocumentoCreadoPorId(String id) {
+        Optional<DocumentosCreados> documentosCreados = documentosCreadosRepository.findById(id);
+        if (documentosCreados.isPresent()) {
+            return documentosCreados.get();
+        } else {
+            throw new ResourceNotFoundException("Documento con ID " + id + " no encontrado.");
+        }
+    }
 
 }

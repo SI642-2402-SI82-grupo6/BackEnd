@@ -29,4 +29,9 @@ public class ResultadosConsultaController {
         List<DocumentosCreados> resultadosConsultaDTO = resultadosConsultaService.obtenerDocumentosCreados();
         return ResponseEntity.ok(resultadosConsultaDTO);
     }
+    @GetMapping("/obtenerDocumentoCreadoPorId/{id}")
+    public ResponseEntity<DocumentosCreados> obtenerDocumentoCreadoPorId(@PathVariable String id) {
+        DocumentosCreados documentosCreados = resultadosConsultaService.obtenerDocumentoCreadoPorId(id);
+        return ResponseEntity.ok(documentosCreados);
+    }
 }
